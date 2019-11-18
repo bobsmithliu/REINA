@@ -63,7 +63,7 @@ class MyClient(discord.Client):
                 await channel.send("**Hey guys!** Time now is `{}`, The next episode of 22/7 {} \n"
                                    "is airing in 30 minutes. \n\n"
                                    "You can watch it at: \n"
-                                   "Link 1: https://vk.com/videos-177082369?z=video-177082369_456239347%2Fclub177082369%2Fpl_-177082369_-2 \n"
+                                   "Link 1: https://vk.com/videos-177082369 \n"
                                    "Link 2: https://ok.ru/videoembed/1461556485879".format(now.strftime('%Y-%m-%d %H:%M %Z'), keisanchuu_role.mention))
             else:
                 await asyncio.sleep(0.2)
@@ -76,7 +76,7 @@ class MyClient(discord.Client):
                 await channel.send("**Hey guys!** Time now is `{}`, The next episode of 22/7 {} \n"
                                    "is airing in 5 minutes. \n\n"
                                    "You can watch it at: \n"
-                                   "Link 1: https://vk.com/videos-177082369?z=video-177082369_456239347%2Fclub177082369%2Fpl_-177082369_-2 \n"
+                                   "Link 1: https://vk.com/videos-177082369 \n"
                                    "Link 2: https://ok.ru/videoembed/1461556485879".format(now.strftime('%Y-%m-%d %H:%M %Z'), keisanchuu_role.mention))
             else:
                 await asyncio.sleep(0.2)

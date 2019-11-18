@@ -6,11 +6,11 @@ TOKEN = '[REDACTED]'
 
 reina = discord.Game("Roles and Entertainment Information and Notification Agent")
 bot_description = '''
-R.E.I.N.A. 1.01
+R.E.I.N.A. 1.02
 
 Roles and Entertainment Information and Notification Agent
 
-Open-source at: https://github.com/Skk-nsmt/227reminder
+Open-source at: https://github.com/Skk-nsmt/REINA
 '''
 bot = commands.Bot(command_prefix='>', description=bot_description)
 sub = {
