@@ -1,19 +1,38 @@
 import discord
 from discord.ext import commands
 import datetime
+import pytz
+import time
+import bs4
+import requests
+import random
+
+jptz = pytz.timezone('Asia/Tokyo')
+universaltz = pytz.timezone('UTC')
+pacifictz = pytz.timezone('America/Los_Angeles')
+centraltz = pytz.timezone('America/Chicago')
+easterntz = pytz.timezone('America/New_York')
 
 TOKEN = '[REDACTED]'
 
+lyrics_list = ['Syndrome：アイシテル',
+               'やがて心の花も枯れてしまったよ',
+               '終わったことなんか終わったままでいいよ',
+               '花は幻のように'
+               ]
+
 reina = discord.Game("Roles and Entertainment Information and Notification Agent")
 bot_description = '''
-R.E.I.N.A. 1.02
+「{}」
+
+R.E.I.N.A. 1.05
 
 Roles and Entertainment Information and Notification Agent
 
-Open-source at: https://github.com/Skk-nsmt/REINA
-'''
+Open source at: https://github.com/Skk-nsmt/REINA
+'''.format(random.choice(lyrics_list))
 bot = commands.Bot(command_prefix='>', description=bot_description)
-sub = {
+sub_roles_id = {
     'Tamago': 497370840824807424,
     'Tsubomi': 497369993428729856,
     'Ainacchi': 466163376779689985,
@@ -38,7 +57,7 @@ sub = {
     'Sakura': 466162595817193482,
     'Sally': 466162519447437312
 }
-main = {
+main_roles_id = {
     'Tamago': 497370864254320670,
     'Tsubomi': 497370023397163008,
     'Ainacchi': 466160683185340426,
@@ -66,6 +85,20 @@ main = {
 acceptable_roles = ['Tamago', 'Tsubomi', 'Ainacchi', 'Rettan', 'Mikami', 'Moe', 'Ayaka', 'Reinyan', 'Reika',
                     'Chiharun', 'Nicole', 'Meimei', 'Miu', 'Nagomin', 'Akane', 'Kanaeru', 'Miyako', 'Mizzy',
                     'Jun', 'Ruri', 'Sakura', 'Sally']
+stream_links = {
+    'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
+    'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
+    'Mei': ['Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()],
+    'Reina': ['Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta()],
+    'Sally': ['Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()],
+    'Aina': ['Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()],
+    'Kanae': ['Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple()],
+    'Urara': ['Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242)],
+    'Moe': ['Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta()],
+    'Mizuha': ['Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()],
+    'Nagomi': ['Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)],
+    'Room': ['Nananiji Room', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
+}
 
 
 @bot.listen()
@@ -75,6 +108,21 @@ async def on_ready():
     print(bot.user.id)
     print('------')
     await bot.change_presence(status=discord.Status.online, activity=reina)
+
+
+@bot.listen()
+async def on_message(message):
+    # don't respond to ourselves
+    if message.author == bot.user:
+        return
+
+    # serves as a test
+    elif message.content == 'gettime':
+        print("sending time.")
+        print("{}".format(message.channel.id))
+        now = datetime.datetime.now(jptz)
+        await message.channel.trigger_typing()
+        await message.channel.send('{}'.format(now.strftime('%Y-%m-%d %H:%M:%S %Z')))
 
 
 class Default(commands.Cog):
@@ -106,9 +154,9 @@ class Default(commands.Cog):
         if role_name in acceptable_roles:
             if main_role == 'main':
                 role_ids = [role.id for role in ctx.author.roles]
-                main_roles = list(set(role_ids) & set(main.values()))
+                main_roles = list(set(role_ids) & set(main_roles_id.values()))
 
-                role = ctx.guild.get_role(main[role_name])
+                role = ctx.guild.get_role(main_roles_id[role_name])
 
                 if role in ctx.author.roles:
                     await ctx.send("You already have that role!")
@@ -118,7 +166,7 @@ class Default(commands.Cog):
                     await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
                     await ctx.send("Role added.")
             elif main_role == 'sub':
-                role = ctx.guild.get_role(sub[role_name])
+                role = ctx.guild.get_role(sub_roles_id[role_name])
 
                 if role in ctx.author.roles:
                     await ctx.send("You already have that role!")
@@ -145,7 +193,7 @@ class Default(commands.Cog):
         """
         if role_name in acceptable_roles:
             if main_role == 'main':
-                role = ctx.guild.get_role(main[role_name])
+                role = ctx.guild.get_role(main_roles_id[role_name])
 
                 if role not in ctx.author.roles:
                     await ctx.send("You don't have that role!")
@@ -153,7 +201,7 @@ class Default(commands.Cog):
                     await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
                     await ctx.send("Role removed.")
             elif main_role == 'sub':
-                role = ctx.guild.get_role(sub[role_name])
+                role = ctx.guild.get_role(sub_roles_id[role_name])
 
                 if role not in ctx.author.roles:
                     await ctx.send("You don't have that role!")
@@ -213,6 +261,61 @@ class Default(commands.Cog):
         else:
             await ctx.author.remove_roles(keisanchuu_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to 22/7 Keisanchuu notifications.")
+
+    @commands.command()
+    @commands.has_any_role('Moderators')
+    async def announce(self, ctx, person, input_time):
+        """
+        (Mod-only command) Make stream announcements at #227 streams.
+
+        Make stream announcements at #227 streams.
+        For "person" parameter, use members' first name, or use "Room" for Nananiji Room stream.
+        For "input_time" parameter, use "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+
+        Please note that when executing the command, the stream will need to be happening today in Japan.
+        """
+        stream_channel = discord.utils.get(ctx.guild.channels, name='227\xa0\xa0streams')
+        stream_channel.trigger_typing()
+        ctx.trigger_typing()
+
+        headers = {
+            'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.62 Safari/537.36",
+            'Referer': "https://www.showroom-live.com"
+        }
+
+        if person in stream_links:
+            now = datetime.datetime.now(jptz)
+
+            try:
+                result = requests.get(stream_links[person][1], headers=headers)
+                page = bs4.BeautifulSoup(result.content, "html.parser")
+
+                parsed_time = time.strptime(input_time, "%H:%M")
+
+                stream_time = jptz.localize(datetime.datetime(year=now.year, month=now.month, day=now.day, hour=parsed_time.tm_hour, minute=parsed_time.tm_min))
+
+                announcement_embed = discord.Embed(title="**{}**".format(stream_links[person][0]),
+                                                   type='rich',
+                                                   description='{}'.format(stream_links[person][1]),
+                                                   color=stream_links[person][2])
+
+                announcement_embed.add_field(name='Japan Time', value='{}'.format(stream_time.strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Universal Time', value='{}'.format(stream_time.astimezone(universaltz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Eastern Time', value='{}'.format(stream_time.astimezone(easterntz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Central Time', value='{}'.format(stream_time.astimezone(centraltz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Pacific Time', value='{}'.format(stream_time.astimezone(pacifictz).strftime("%Y-%m-%d %I:%M%p")))
+
+                announcement_embed.set_author(name='Upcoming Stream', icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
+                announcement_embed.set_image(url=page.find("meta", attrs={"property": "og:image"})['content'])
+
+                announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name), icon_url=ctx.author.avatar_url)
+
+                await stream_channel.send(embed=announcement_embed)
+            except ValueError:
+                await ctx.send("Illegal time.")
+
+        else:
+            await ctx.send("Illegal name.")
 
 
 bot.add_cog(Default(bot))
