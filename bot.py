@@ -55,7 +55,8 @@ sub_roles_id = {
     'Jun': 466162727598161931,
     'Ruri': 466162700880183307,
     'Sakura': 466162595817193482,
-    'Sally': 466162519447437312
+    'Sally': 466162519447437312,
+    'Uta': 659171909723750405
 }
 main_roles_id = {
     'Tamago': 497370864254320670,
@@ -80,15 +81,17 @@ main_roles_id = {
     'Jun': 466159852532531210,
     'Ruri': 466159773604249611,
     'Sakura': 466159732235829249,
-    'Sally': 466159611179958273
+    'Sally': 466159611179958273,
+    'Uta': 659171144028520475
 }
 acceptable_roles = ['Tamago', 'Tsubomi', 'Ainacchi', 'Rettan', 'Mikami', 'Moe', 'Ayaka', 'Reinyan', 'Reika',
                     'Chiharun', 'Nicole', 'Meimei', 'Miu', 'Nagomin', 'Akane', 'Kanaeru', 'Miyako', 'Mizzy',
-                    'Jun', 'Ruri', 'Sakura', 'Sally']
+                    'Jun', 'Ruri', 'Sakura', 'Sally', 'Uta']
 stream_links = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
     'Mei': ['Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()],
+    'Uta': ['Kawase Uta', '!!!Stream Link not yet available!!!', discord.Color.blue()],
     'Reina': ['Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta()],
     'Sally': ['Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()],
     'Aina': ['Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()],
@@ -138,21 +141,21 @@ class Default(commands.Cog):
         await ctx.send("Hi! {}".format(ctx.author.display_name))
 
     @commands.command()
-    async def role(self, ctx, main_role, role_name):
+    async def role(self, ctx, role_type, role_name):
         """
         Add a role.
 
-        main_role: Use 'main' or 'sub' to indicate which type of role you want. Your main role will control your nametag colour.
+        role_type: Use 'main' or 'sub' to indicate which type of role you want. Your main role will control your nametag colour.
         role_name: The name of your role.
 
         E.g.: ">role main Sally" will add Sally as your main role and make your nametag yellow.
         E.g.: ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
 
         Only the following roles may be added:
-        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
+        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
         """
         if role_name in acceptable_roles:
-            if main_role == 'main':
+            if role_type == 'main':
                 role_ids = [role.id for role in ctx.author.roles]
                 main_roles = list(set(role_ids) & set(main_roles_id.values()))
 
@@ -165,7 +168,7 @@ class Default(commands.Cog):
                 else:
                     await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
                     await ctx.send("Role added.")
-            elif main_role == 'sub':
+            elif role_type == 'sub':
                 role = ctx.guild.get_role(sub_roles_id[role_name])
 
                 if role in ctx.author.roles:
@@ -179,20 +182,20 @@ class Default(commands.Cog):
             await ctx.send("Illegal role name.")
 
     @commands.command()
-    async def unrole(self, ctx, main_role, role_name):
+    async def unrole(self, ctx, role_type, role_name):
         """
         Delete a role.
 
-        main_role: Use 'main' or 'sub' to indicate which type of role you wish to delete. If you delete your main role, your nametag colour will change to that of your highest sub role until you add a new main role.
+        role_type: Use 'main' or 'sub' to indicate which type of role you wish to delete. If you delete your main role, your nametag colour will change to that of your highest sub role until you add a new main role.
         role_name: The name of your role.
 
         E.g.: ">unrole main Sally" will remove Sally as your main role. If, say, you have Meimei as a sub role, your nametag colour will then be light blue until you add a new main role.
 
         Only the following roles may be deleted:
-        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
+        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
         """
         if role_name in acceptable_roles:
-            if main_role == 'main':
+            if role_type == 'main':
                 role = ctx.guild.get_role(main_roles_id[role_name])
 
                 if role not in ctx.author.roles:
@@ -200,7 +203,7 @@ class Default(commands.Cog):
                 else:
                     await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
                     await ctx.send("Role removed.")
-            elif main_role == 'sub':
+            elif role_type == 'sub':
                 role = ctx.guild.get_role(sub_roles_id[role_name])
 
                 if role not in ctx.author.roles:
@@ -237,30 +240,6 @@ class Default(commands.Cog):
         else:
             await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to Kuraten! notifications.")
-
-    @commands.command(aliases=["subkeisanchuu"])
-    async def subKeisanchuu(self, ctx):
-        """
-        Subscribe to 22/7 Keisanchuu notifications.
-        """
-        keisanchuu_role = ctx.guild.get_role(641112458291052584)
-        if keisanchuu_role in ctx.author.roles:
-            await ctx.send("You already have that role!")
-        else:
-            await ctx.author.add_roles(keisanchuu_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
-            await ctx.send("You have subscribed to 22/7 Keisanchuu notifications.")
-
-    @commands.command(aliases=["unsubkeisanchuu"])
-    async def unsubKeisanchuu(self, ctx):
-        """
-        Unsubscribe to 22/7 Keisanchuu notifications.
-        """
-        keisanchuu_role = ctx.guild.get_role(641112458291052584)
-        if keisanchuu_role not in ctx.author.roles:
-            await ctx.send("You don't have that role!")
-        else:
-            await ctx.author.remove_roles(keisanchuu_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
-            await ctx.send("You have unsubscribed to 22/7 Keisanchuu notifications.")
 
     @commands.command()
     @commands.has_any_role('Moderators')
