@@ -25,7 +25,7 @@ reina = discord.Game("Roles and Entertainment Information and Notification Agent
 bot_description = '''
 「{}」
 
-R.E.I.N.A. 1.05
+R.E.I.N.A. 1.06
 
 Roles and Entertainment Information and Notification Agent
 
