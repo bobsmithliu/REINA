@@ -86,7 +86,7 @@ class MyClient(discord.Client):
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://www.nanabunnonijyuuni.com/assets/img/top/main/img_tv_anime.jpg')
 
-                await radio_channel.send(embed=alert_embed)
+                await anime_channel.send(embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
@@ -103,7 +103,7 @@ class MyClient(discord.Client):
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://www.nanabunnonijyuuni.com/assets/img/top/main/img_tv_anime.jpg')
 
-                await radio_channel.send(embed=alert_embed)
+                await anime_channel.send(embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 

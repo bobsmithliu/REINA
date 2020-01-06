@@ -104,13 +104,11 @@ stream_links = {
 }
 
 
-async def check_if_bot_spam(ctx):
-    bot_channel = ctx.guild.get_channel(336287198510841856)
-    if ctx.channel == bot_channel:
-        return True
-    else:
-        await ctx.send("Please proceed your action at {}".format(bot_channel.mention))
-        return False
+def check_if_bot_spam():
+    async def predicate(ctx):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        return ctx.channel == bot_channel
+    return commands.check(predicate)
 
 
 @bot.listen()
@@ -135,7 +133,7 @@ class Default(commands.Cog):
         self._last_member = None
 
     @commands.command()
-    @commands.check(check_if_bot_spam)
+    @check_if_bot_spam()
     async def hi(self, ctx):
         """
         Let R.E.I.N.A. greet you!
@@ -143,7 +141,7 @@ class Default(commands.Cog):
         await ctx.send("Hi! {}".format(ctx.author.display_name))
 
     @commands.command()
-    @commands.check(check_if_bot_spam)
+    @check_if_bot_spam()
     async def role(self, ctx, role_type, role_name):
         """
         Add a role.
@@ -185,7 +183,7 @@ class Default(commands.Cog):
             await ctx.send("Illegal role name.")
 
     @commands.command()
-    @commands.check(check_if_bot_spam)
+    @check_if_bot_spam()
     async def unrole(self, ctx, role_type, role_name):
         """
         Delete a role.
@@ -222,7 +220,7 @@ class Default(commands.Cog):
             await ctx.send("Illegal role name.")
 
     @commands.command(aliases=["subkuraten"])
-    @commands.check(check_if_bot_spam)
+    @check_if_bot_spam()
     async def subKuraten(self, ctx):
         """
         Subscribe to Kuraten! notifications.
@@ -235,7 +233,7 @@ class Default(commands.Cog):
             await ctx.send("You have subscribed to Kuraten! notifications.")
 
     @commands.command(aliases=["unsubkuraten"])
-    @commands.check(check_if_bot_spam)
+    @check_if_bot_spam()
     async def unsubKuraten(self, ctx):
         """
         Unsubscribe to Kuraten! notifications.
@@ -249,7 +247,7 @@ class Default(commands.Cog):
 
     @commands.command()
     @commands.has_any_role('Moderators')
-    @commands.check(check_if_bot_spam)
+    @check_if_bot_spam()
     async def announce(self, ctx, person, input_time):
         """
         (Mod-only command) Make stream announcements at #227 streams.
@@ -302,6 +300,17 @@ class Default(commands.Cog):
 
         else:
             await ctx.send("Illegal name.")
+
+    @hi.error
+    @role.error
+    @unrole.error
+    @subKuraten.error
+    @unsubKuraten.error
+    @announce.error
+    async def command_error(self, ctx, error):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
 
 
 bot.add_cog(Default(bot))
