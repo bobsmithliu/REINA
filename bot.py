@@ -21,11 +21,11 @@ lyrics_list = ['Syndrome：アイシテル',
                '花は幻のように'
                ]
 
-reina = discord.Game("Roles and Entertainment Information and Notification Agent")
+reina = discord.Game(">help")
 bot_description = '''
 「{}」
 
-R.E.I.N.A. 1.06
+R.E.I.N.A. 1.07
 
 Roles and Entertainment Information and Notification Agent
 
@@ -104,6 +104,15 @@ stream_links = {
 }
 
 
+async def check_if_bot_spam(ctx):
+    bot_channel = ctx.guild.get_channel(336287198510841856)
+    if ctx.channel == bot_channel:
+        return True
+    else:
+        await ctx.send("Please proceed your action at {}".format(bot_channel.mention))
+        return False
+
+
 @bot.listen()
 async def on_ready():
     print('Ready!')
@@ -119,14 +128,6 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    # serves as a test
-    elif message.content == 'gettime':
-        print("sending time.")
-        print("{}".format(message.channel.id))
-        now = datetime.datetime.now(jptz)
-        await message.channel.trigger_typing()
-        await message.channel.send('{}'.format(now.strftime('%Y-%m-%d %H:%M:%S %Z')))
-
 
 class Default(commands.Cog):
     def __init__(self, bot):
@@ -134,6 +135,7 @@ class Default(commands.Cog):
         self._last_member = None
 
     @commands.command()
+    @commands.check(check_if_bot_spam)
     async def hi(self, ctx):
         """
         Let R.E.I.N.A. greet you!
@@ -141,6 +143,7 @@ class Default(commands.Cog):
         await ctx.send("Hi! {}".format(ctx.author.display_name))
 
     @commands.command()
+    @commands.check(check_if_bot_spam)
     async def role(self, ctx, role_type, role_name):
         """
         Add a role.
@@ -182,6 +185,7 @@ class Default(commands.Cog):
             await ctx.send("Illegal role name.")
 
     @commands.command()
+    @commands.check(check_if_bot_spam)
     async def unrole(self, ctx, role_type, role_name):
         """
         Delete a role.
@@ -218,6 +222,7 @@ class Default(commands.Cog):
             await ctx.send("Illegal role name.")
 
     @commands.command(aliases=["subkuraten"])
+    @commands.check(check_if_bot_spam)
     async def subKuraten(self, ctx):
         """
         Subscribe to Kuraten! notifications.
@@ -230,6 +235,7 @@ class Default(commands.Cog):
             await ctx.send("You have subscribed to Kuraten! notifications.")
 
     @commands.command(aliases=["unsubkuraten"])
+    @commands.check(check_if_bot_spam)
     async def unsubKuraten(self, ctx):
         """
         Unsubscribe to Kuraten! notifications.
@@ -243,6 +249,7 @@ class Default(commands.Cog):
 
     @commands.command()
     @commands.has_any_role('Moderators')
+    @commands.check(check_if_bot_spam)
     async def announce(self, ctx, person, input_time):
         """
         (Mod-only command) Make stream announcements at #227 streams.
@@ -254,8 +261,8 @@ class Default(commands.Cog):
         Please note that when executing the command, the stream will need to be happening today in Japan.
         """
         stream_channel = discord.utils.get(ctx.guild.channels, name='227\xa0\xa0streams')
-        stream_channel.trigger_typing()
-        ctx.trigger_typing()
+        await stream_channel.trigger_typing()
+        await ctx.trigger_typing()
 
         headers = {
             'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.62 Safari/537.36",
