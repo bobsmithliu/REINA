@@ -25,7 +25,7 @@ reina = discord.Game(">help")
 bot_description = '''
 「{}」
 
-R.E.I.N.A. 1.07
+R.E.I.N.A. 1.08
 
 Roles and Entertainment Information and Notification Agent
 
@@ -91,7 +91,7 @@ stream_links = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
     'Mei': ['Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()],
-    'Uta': ['Kawase Uta', '!!!Stream Link not yet available!!!', discord.Color.blue()],
+    'Uta': ['Kawase Uta', 'https://www.showroom-live.com/kawaseuta', discord.Color.blue()],
     'Reina': ['Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta()],
     'Sally': ['Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()],
     'Aina': ['Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()],
@@ -296,7 +296,7 @@ class Default(commands.Cog):
 
                 await stream_channel.send(embed=announcement_embed)
             except ValueError:
-                await ctx.send("Illegal time.")
+                await ctx.send("Something happened, please report it to the developer. ")
 
         else:
             await ctx.send("Illegal name.")
