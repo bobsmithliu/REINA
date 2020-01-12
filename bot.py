@@ -163,8 +163,9 @@ class Default(commands.Cog):
             await ctx.send("You are already a member!")
             return
 
-        await nananijiguild.get_member(user_id).remove_role(new_member_role,
-                                                            reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+        await nananijiguild.get_member(user_id).remove_roles(new_member_role,
+                                                             reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+        await ctx.send("You now should have access to the rest of the server. If not, please DM one of the Moderators. ")
 
     @commands.command()
     @check_if_role_or_bot_spam()
