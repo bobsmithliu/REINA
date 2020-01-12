@@ -7,13 +7,13 @@ import bs4
 import requests
 import random
 
+import TOKEN
+
 jptz = pytz.timezone('Asia/Tokyo')
 universaltz = pytz.timezone('UTC')
 pacifictz = pytz.timezone('America/Los_Angeles')
 centraltz = pytz.timezone('America/Chicago')
 easterntz = pytz.timezone('America/New_York')
-
-TOKEN = '[REDACTED]'
 
 lyrics_list = ['Syndrome：アイシテル',
                'やがて心の花も枯れてしまったよ',
@@ -25,7 +25,7 @@ reina = discord.Game(">help")
 bot_description = '''
 「{}」
 
-R.E.I.N.A. 1.08
+R.E.I.N.A. 1.10
 
 Roles and Entertainment Information and Notification Agent
 
@@ -111,6 +111,14 @@ def check_if_bot_spam():
     return commands.check(predicate)
 
 
+def check_if_role_or_bot_spam():
+    async def predicate(ctx):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        role_channel = discord.utils.get(ctx.guild.channels, name='roles')
+        return ctx.channel == bot_channel or ctx.channel == role_channel
+    return commands.check(predicate)
+
+
 @bot.listen()
 async def on_ready():
     print('Ready!')
@@ -141,7 +149,25 @@ class Default(commands.Cog):
         await ctx.send("Hi! {}".format(ctx.author.display_name))
 
     @commands.command()
-    @check_if_bot_spam()
+    @commands.dm_only()
+    async def rule_acknowledged(self, ctx):
+        user_id = ctx.author.id
+
+        nananijiguild = self.bot.get_guild(336277820684763148)
+        if nananijiguild.get_member(user_id) is None:
+            await ctx.send("Unsupported operation.")
+            return
+
+        new_member_role = nananijiguild.get_role(663581221967757313)
+        if new_member_role not in nananijiguild.get_member(user_id).roles:
+            await ctx.send("You are already a member!")
+            return
+
+        await nananijiguild.get_member(user_id).remove_role(new_member_role,
+                                                            reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+
+    @commands.command()
+    @check_if_role_or_bot_spam()
     async def role(self, ctx, role_type, role_name):
         """
         Add a role.
@@ -183,7 +209,7 @@ class Default(commands.Cog):
             await ctx.send("Illegal role name.")
 
     @commands.command()
-    @check_if_bot_spam()
+    @check_if_role_or_bot_spam()
     async def unrole(self, ctx, role_type, role_name):
         """
         Delete a role.
@@ -199,23 +225,19 @@ class Default(commands.Cog):
         if role_name in acceptable_roles:
             if role_type == 'main':
                 role = ctx.guild.get_role(main_roles_id[role_name])
-
-                if role not in ctx.author.roles:
-                    await ctx.send("You don't have that role!")
-                else:
-                    await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
-                    await ctx.send("Role removed.")
             elif role_type == 'sub':
                 role = ctx.guild.get_role(sub_roles_id[role_name])
-
-                if role not in ctx.author.roles:
-                    await ctx.send("You don't have that role!")
-                else:
-                    await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
-                        datetime.datetime.utcnow()))
-                    await ctx.send("Role removed.")
             else:
                 await ctx.send("Illegal operation.")
+                return
+
+            if role not in ctx.author.roles:
+                await ctx.send("You don't have that role!")
+            else:
+                await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                    datetime.datetime.utcnow()))
+                await ctx.send("Role removed.")
+
         else:
             await ctx.send("Illegal role name.")
 
@@ -258,7 +280,7 @@ class Default(commands.Cog):
 
         Please note that when executing the command, the stream will need to be happening today in Japan.
         """
-        stream_channel = discord.utils.get(ctx.guild.channels, name='227\xa0\xa0streams')
+        stream_channel = discord.utils.get(ctx.guild.channels, name='227-streams')
         await stream_channel.trigger_typing()
         await ctx.trigger_typing()
 
@@ -314,4 +336,4 @@ class Default(commands.Cog):
 
 
 bot.add_cog(Default(bot))
-bot.run(TOKEN)
+bot.run(TOKEN.TOKEN)

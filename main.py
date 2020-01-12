@@ -3,7 +3,7 @@ import asyncio
 import datetime
 import pytz
 
-TOKEN = '[REDACTED]'
+import TOKEN
 
 jptz = pytz.timezone('Asia/Tokyo')
 
@@ -109,4 +109,4 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-client.run(TOKEN)
+client.run(TOKEN.TOKEN)
