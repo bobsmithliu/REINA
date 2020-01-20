@@ -25,7 +25,7 @@ reina = discord.Game(">help")
 bot_description = '''
 「{}」
 
-R.E.I.N.A. 1.10
+R.E.I.N.A. 1.11
 
 Roles and Entertainment Information and Notification Agent
 
@@ -207,7 +207,7 @@ class Default(commands.Cog):
             else:
                 await ctx.send("Illegal operation.")
         else:
-            await ctx.send("Illegal role name.")
+            await ctx.send("Illegal role name. Type `>help role` for a list of acceptable role names. ")
 
     @commands.command()
     @check_if_role_or_bot_spam()
@@ -267,6 +267,30 @@ class Default(commands.Cog):
         else:
             await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to Kuraten! notifications.")
+
+    @check_if_bot_spam()
+    async def subanime(self, ctx):
+        """
+        Subscribe to anime notifications.
+        """
+        anime_role = ctx.guild.get_role(668634086172131378)
+        if anime_role in ctx.author.roles:
+            await ctx.send("You already have that role!")
+        else:
+            await ctx.author.add_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+            await ctx.send("You have subscribed to anime notifications.")
+
+    @check_if_bot_spam()
+    async def unsubanime(self, ctx):
+        """
+        Unsubscribe to anime notifications.
+        """
+        anime_role = ctx.guild.get_role(668634086172131378)
+        if anime_role not in ctx.author.roles:
+            await ctx.send("You don't have that role!")
+        else:
+            await ctx.author.remove_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+            await ctx.send("You have unsubscribed to anime notifications.")
 
     @commands.command()
     @commands.has_any_role('Moderators')
@@ -329,6 +353,8 @@ class Default(commands.Cog):
     @unrole.error
     @subKuraten.error
     @unsubKuraten.error
+    @subanime.error
+    @unsubanime.error
     @announce.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)

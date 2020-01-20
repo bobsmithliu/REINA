@@ -35,6 +35,7 @@ class MyClient(discord.Client):
             # =================== KURATEN =====================
 
             kuraten_role = radio_channel.guild.get_role(641113337186222080)
+            anime_role = radio_channel.guild.get_role(668634086172131378)
 
             # Kuraten 30 min alert
             if now.weekday() == 6 and now.hour == 10 and now.minute == 30 and now.second == 0:
@@ -82,11 +83,12 @@ class MyClient(discord.Client):
                                             description="**Hey guys!** Time now is `{}`, This week's 22/7 anime will start in **30 minutes**. \n"
                                                         "You can watch it at: ".format(now.strftime('%Y-%m-%d %H:%M %Z')))
 
-                alert_embed.add_field(name='Link', value='https://vk.com/videos-177082369')
+                alert_embed.add_field(name='Link 1', value='https://vk.com/videos-177082369')
+                alert_embed.add_field(name='Link 2', value='https://ok.ru/videoembed/1461556485879')
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://www.nanabunnonijyuuni.com/assets/img/top/main/img_tv_anime.jpg')
 
-                await anime_channel.send(embed=alert_embed)
+                await anime_channel.send(content=anime_role.mention, embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
@@ -99,11 +101,12 @@ class MyClient(discord.Client):
                                             description="**Hey guys!** Time now is `{}`, This week's 22/7 anime will start in **5 minutes**. \n"
                                                         "You can watch it at: ".format(now.strftime('%Y-%m-%d %H:%M %Z')))
 
-                alert_embed.add_field(name='Link', value='https://vk.com/videos-177082369')
+                alert_embed.add_field(name='Link 1', value='https://vk.com/videos-177082369')
+                alert_embed.add_field(name='Link 2', value='https://ok.ru/videoembed/1461556485879')
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://www.nanabunnonijyuuni.com/assets/img/top/main/img_tv_anime.jpg')
 
-                await anime_channel.send(embed=alert_embed)
+                await anime_channel.send(content=anime_role.mention, embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
