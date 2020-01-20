@@ -25,7 +25,7 @@ reina = discord.Game(">help")
 bot_description = '''
 「{}」
 
-R.E.I.N.A. 1.11
+R.E.I.N.A. 1.12
 
 Roles and Entertainment Information and Notification Agent
 
@@ -167,6 +167,18 @@ class Default(commands.Cog):
                                                              reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
         await ctx.send("You now should have access to the rest of the server. If not, please DM one of the Moderators. ")
 
+    @hi.error
+    async def command_error(self, ctx, error):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+
+
+class Roles(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
+
     @commands.command()
     @check_if_role_or_bot_spam()
     async def role(self, ctx, role_type, role_name):
@@ -242,6 +254,19 @@ class Default(commands.Cog):
         else:
             await ctx.send("Illegal role name.")
 
+    @role.error
+    @unrole.error
+    async def command_error(self, ctx, error):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+
+
+class Kuraten(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
+
     @commands.command(aliases=["subkuraten"])
     @check_if_bot_spam()
     async def subKuraten(self, ctx):
@@ -268,6 +293,19 @@ class Default(commands.Cog):
             await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to Kuraten! notifications.")
 
+    @subKuraten.error
+    @unsubKuraten.error
+    async def command_error(self, ctx, error):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+
+
+class Anime(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
+
     @commands.command()
     @check_if_bot_spam()
     async def subanime(self, ctx):
@@ -293,6 +331,19 @@ class Default(commands.Cog):
         else:
             await ctx.author.remove_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to anime notifications.")
+
+    @subanime.error
+    @unsubanime.error
+    async def command_error(self, ctx, error):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+
+
+class Mods(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
 
     @commands.command()
     @commands.has_any_role('Moderators')
@@ -350,13 +401,6 @@ class Default(commands.Cog):
         else:
             await ctx.send("Illegal name.")
 
-    @hi.error
-    @role.error
-    @unrole.error
-    @subKuraten.error
-    @unsubKuraten.error
-    @subanime.error
-    @unsubanime.error
     @announce.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
@@ -365,4 +409,8 @@ class Default(commands.Cog):
 
 
 bot.add_cog(Default(bot))
+bot.add_cog(Roles(bot))
+bot.add_cog(Kuraten(bot))
+bot.add_cog(Anime(bot))
+bot.add_cog(Mods(bot))
 bot.run(TOKEN.TOKEN)
