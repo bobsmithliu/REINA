@@ -268,6 +268,7 @@ class Default(commands.Cog):
             await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to Kuraten! notifications.")
 
+    @commands.command()
     @check_if_bot_spam()
     async def subanime(self, ctx):
         """
@@ -280,6 +281,7 @@ class Default(commands.Cog):
             await ctx.author.add_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have subscribed to anime notifications.")
 
+    @commands.command()
     @check_if_bot_spam()
     async def unsubanime(self, ctx):
         """
