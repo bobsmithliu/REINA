@@ -263,6 +263,7 @@ class Kuraten(commands.Cog):
         self.bot = bot
         self._last_member = None
 
+    @commands.command()
     @check_if_bot_spam()
     async def subKuraten(self, ctx):
         """
@@ -275,6 +276,7 @@ class Kuraten(commands.Cog):
             await ctx.author.add_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have subscribed to Kuraten! notifications.")
 
+    @commands.command()
     @check_if_bot_spam()
     async def unsubKuraten(self, ctx):
         """
