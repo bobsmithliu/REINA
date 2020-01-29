@@ -19,7 +19,6 @@ class MyClient(discord.Client):
         print('Logged on as', self.user)
 
     async def on_member_join(self, member):
-        print("new member detected.")
         new_member_role = self.get_channel(465158208978157588).guild.get_role(663581221967757313)
         await member.add_roles(new_member_role)
 

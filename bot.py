@@ -5,7 +5,6 @@ import pytz
 import time
 import bs4
 import requests
-import random
 
 import TOKEN
 
@@ -15,23 +14,16 @@ pacifictz = pytz.timezone('America/Los_Angeles')
 centraltz = pytz.timezone('America/Chicago')
 easterntz = pytz.timezone('America/New_York')
 
-lyrics_list = ['Syndrome：アイシテル',
-               'やがて心の花も枯れてしまったよ',
-               '終わったことなんか終わったままでいいよ',
-               '花は幻のように'
-               ]
-
 reina = discord.Game(">help")
 bot_description = '''
-「{}」
-
-R.E.I.N.A. 1.12
+R.E.I.N.A. 1.13
 
 Roles and Entertainment Information and Notification Agent
 
 Open source at: https://github.com/Skk-nsmt/REINA
-'''.format(random.choice(lyrics_list))
-bot = commands.Bot(command_prefix='>', description=bot_description)
+'''
+bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True)
+
 sub_roles_id = {
     'Tamago': 497370840824807424,
     'Tsubomi': 497369993428729856,
@@ -186,7 +178,7 @@ class Roles(commands.Cog):
         Add a role.
 
         role_type: Use 'main' or 'sub' to indicate which type of role you want. Your main role will control your nametag colour.
-        role_name: The name of your role.
+        role_name: The name of your role. (Case-insensitive)
 
         E.g.: ">role main Sally" will add Sally as your main role and make your nametag yellow.
         E.g.: ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
@@ -194,6 +186,8 @@ class Roles(commands.Cog):
         Only the following roles may be added:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
         """
+        role_name = role_name.capitalize()
+
         if role_name in acceptable_roles:
             if role_type == 'main':
                 role_ids = [role.id for role in ctx.author.roles]
@@ -228,13 +222,15 @@ class Roles(commands.Cog):
         Delete a role.
 
         role_type: Use 'main' or 'sub' to indicate which type of role you wish to delete. If you delete your main role, your nametag colour will change to that of your highest sub role until you add a new main role.
-        role_name: The name of your role.
+        role_name: The name of your role. (Case-insensitive)
 
         E.g.: ">unrole main Sally" will remove Sally as your main role. If, say, you have Meimei as a sub role, your nametag colour will then be light blue until you add a new main role.
 
         Only the following roles may be deleted:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
         """
+        role_name = role_name.capitalize()
+
         if role_name in acceptable_roles:
             if role_type == 'main':
                 role = ctx.guild.get_role(main_roles_id[role_name])
@@ -267,7 +263,6 @@ class Kuraten(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.command(aliases=["subkuraten"])
     @check_if_bot_spam()
     async def subKuraten(self, ctx):
         """
@@ -280,7 +275,6 @@ class Kuraten(commands.Cog):
             await ctx.author.add_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have subscribed to Kuraten! notifications.")
 
-    @commands.command(aliases=["unsubkuraten"])
     @check_if_bot_spam()
     async def unsubKuraten(self, ctx):
         """
