@@ -83,7 +83,7 @@ class MyClient(discord.Client):
                                                         "You can watch it at: ".format(now.strftime('%Y-%m-%d %H:%M %Z')))
 
                 alert_embed.add_field(name='Link 1', value='https://vk.com/videos-177082369')
-                alert_embed.add_field(name='Link 2', value='https://ok.ru/videoembed/1461556485879')
+                alert_embed.add_field(name='Link 2', value='https://ok.ru/videoembed/1977861545719')
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://www.nanabunnonijyuuni.com/assets/img/top/main/img_tv_anime.jpg')
 
@@ -101,7 +101,7 @@ class MyClient(discord.Client):
                                                         "You can watch it at: ".format(now.strftime('%Y-%m-%d %H:%M %Z')))
 
                 alert_embed.add_field(name='Link 1', value='https://vk.com/videos-177082369')
-                alert_embed.add_field(name='Link 2', value='https://ok.ru/videoembed/1461556485879')
+                alert_embed.add_field(name='Link 2', value='https://ok.ru/videoembed/1977861545719')
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://www.nanabunnonijyuuni.com/assets/img/top/main/img_tv_anime.jpg')
 

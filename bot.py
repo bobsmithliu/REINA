@@ -14,15 +14,17 @@ pacifictz = pytz.timezone('America/Los_Angeles')
 centraltz = pytz.timezone('America/Chicago')
 easterntz = pytz.timezone('America/New_York')
 
+
 reina = discord.Game(">help")
 bot_description = '''
-R.E.I.N.A. 1.13
+R.E.I.N.A. 1.14
 
 Roles and Entertainment Information and Notification Agent
 
 Open source at: https://github.com/Skk-nsmt/REINA
 '''
 bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True)
+
 
 sub_roles_id = {
     'Tamago': 497370840824807424,
@@ -92,7 +94,7 @@ stream_links = {
     'Moe': ['Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta()],
     'Mizuha': ['Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()],
     'Nagomi': ['Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)],
-    'Room': ['Nananiji Room', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
+    'Nananiji': ['Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
 }
 
 
@@ -125,6 +127,10 @@ async def on_message(message):
     # don't respond to ourselves
     if message.author == bot.user:
         return
+    if 'cod' in message.content.lower():
+        await message.add_reaction('🐟')
+    if 'reina' in message.content.lower() and 'cute' in message.content.lower():
+        await message.add_reaction('♥️')
 
 
 class Default(commands.Cog):
@@ -139,25 +145,6 @@ class Default(commands.Cog):
         Let R.E.I.N.A. greet you!
         """
         await ctx.send("Hi! {}".format(ctx.author.display_name))
-
-    @commands.command()
-    @commands.dm_only()
-    async def rule_acknowledged(self, ctx):
-        user_id = ctx.author.id
-
-        nananijiguild = self.bot.get_guild(336277820684763148)
-        if nananijiguild.get_member(user_id) is None:
-            await ctx.send("Unsupported operation.")
-            return
-
-        new_member_role = nananijiguild.get_role(663581221967757313)
-        if new_member_role not in nananijiguild.get_member(user_id).roles:
-            await ctx.send("You are already a member!")
-            return
-
-        await nananijiguild.get_member(user_id).remove_roles(new_member_role,
-                                                             reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
-        await ctx.send("You now should have access to the rest of the server. If not, please DM one of the Moderators. ")
 
     @hi.error
     async def command_error(self, ctx, error):
@@ -265,7 +252,7 @@ class Kuraten(commands.Cog):
 
     @commands.command()
     @check_if_bot_spam()
-    async def subKuraten(self, ctx):
+    async def sub_kuraten(self, ctx):
         """
         Subscribe to Kuraten! notifications.
         """
@@ -278,7 +265,7 @@ class Kuraten(commands.Cog):
 
     @commands.command()
     @check_if_bot_spam()
-    async def unsubKuraten(self, ctx):
+    async def unsub_kuraten(self, ctx):
         """
         Unsubscribe to Kuraten! notifications.
         """
@@ -289,8 +276,8 @@ class Kuraten(commands.Cog):
             await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to Kuraten! notifications.")
 
-    @subKuraten.error
-    @unsubKuraten.error
+    @sub_kuraten.error
+    @unsub_kuraten.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
@@ -304,7 +291,7 @@ class Anime(commands.Cog):
 
     @commands.command()
     @check_if_bot_spam()
-    async def subanime(self, ctx):
+    async def sub_anime(self, ctx):
         """
         Subscribe to anime notifications.
         """
@@ -317,7 +304,7 @@ class Anime(commands.Cog):
 
     @commands.command()
     @check_if_bot_spam()
-    async def unsubanime(self, ctx):
+    async def unsub_anime(self, ctx):
         """
         Unsubscribe to anime notifications.
         """
@@ -328,8 +315,8 @@ class Anime(commands.Cog):
             await ctx.author.remove_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to anime notifications.")
 
-    @subanime.error
-    @unsubanime.error
+    @sub_anime.error
+    @unsub_anime.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
@@ -342,15 +329,32 @@ class Mods(commands.Cog):
         self._last_member = None
 
     @commands.command()
-    @commands.has_any_role('Moderators')
-    @check_if_bot_spam()
-    async def announce(self, ctx, person, input_time):
+    @commands.has_any_role('Moderators', 'Disciplinary Committee')
+    async def protect(self, ctx):
         """
-        (Mod-only command) Make stream announcements at #227 streams.
+        (Mod-only command) Do mystery things.
+        """
+        global new_member_loaded
+
+        if new_member_loaded:
+            bot.unload_extension("authentication")
+            new_member_loaded = False
+            await ctx.send("Unloaded. ")
+        else:
+            bot.load_extension("authentication")
+            new_member_loaded = True
+            await ctx.send("Loaded. ")
+
+    @commands.command()
+    @commands.has_any_role('Moderators', 'Disciplinary Committee')
+    @check_if_bot_spam()
+    async def announce(self, ctx, person, stream_time):
+        """
+        (Mod-only command) Make stream announcements.
 
         Make stream announcements at #227 streams.
-        For "person" parameter, use members' first name, or use "Room" for Nananiji Room stream.
-        For "input_time" parameter, use "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+        For "person" parameter, use members' first name, or use "Nananiji" for group stream.
+        For "stream_time" parameter, use "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
 
         Please note that when executing the command, the stream will need to be happening today in Japan.
         """
@@ -370,7 +374,7 @@ class Mods(commands.Cog):
                 result = requests.get(stream_links[person][1], headers=headers)
                 page = bs4.BeautifulSoup(result.content, "html.parser")
 
-                parsed_time = time.strptime(input_time, "%H:%M")
+                parsed_time = stream_time.strptime(stream_time, "%H:%M")
 
                 stream_time = jptz.localize(datetime.datetime(year=now.year, month=now.month, day=now.day, hour=parsed_time.tm_hour, minute=parsed_time.tm_min))
 
@@ -403,6 +407,9 @@ class Mods(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
 
+
+bot.load_extension("authentication")
+new_member_loaded = True
 
 bot.add_cog(Default(bot))
 bot.add_cog(Roles(bot))
