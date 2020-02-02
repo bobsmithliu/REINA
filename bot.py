@@ -348,15 +348,16 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce(self, ctx, person, stream_time):
+    async def announce(self, ctx, person, planned_time):
         """
         (Mod-only command) Make stream announcements.
 
         Make stream announcements at #227 streams.
-        For "person" parameter, use members' first name, or use "Nananiji" for group stream.
-        For "stream_time" parameter, use "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
 
-        Please note that when executing the command, the stream will need to be happening today in Japan.
+        person: use members' first name, or use "Nananiji" for Nananiji Room stream.
+        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+
+        Please note that when executing the command, the stream will need to be happening TODAY in Japan.
         """
         stream_channel = discord.utils.get(ctx.guild.channels, name='227-streams')
         await stream_channel.trigger_typing()
@@ -374,7 +375,7 @@ class Mods(commands.Cog):
                 result = requests.get(stream_links[person][1], headers=headers)
                 page = bs4.BeautifulSoup(result.content, "html.parser")
 
-                parsed_time = stream_time.strptime(stream_time, "%H:%M")
+                parsed_time = time.strptime(planned_time, "%H:%M")
 
                 stream_time = jptz.localize(datetime.datetime(year=now.year, month=now.month, day=now.day, hour=parsed_time.tm_hour, minute=parsed_time.tm_min))
 
@@ -383,16 +384,23 @@ class Mods(commands.Cog):
                                                    description='{}'.format(stream_links[person][1]),
                                                    color=stream_links[person][2])
 
-                announcement_embed.add_field(name='Japan Time', value='{}'.format(stream_time.strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Universal Time', value='{}'.format(stream_time.astimezone(universaltz).strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Eastern Time', value='{}'.format(stream_time.astimezone(easterntz).strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Central Time', value='{}'.format(stream_time.astimezone(centraltz).strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Pacific Time', value='{}'.format(stream_time.astimezone(pacifictz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Japan Time',
+                                             value='{}'.format(stream_time.strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Universal Time',
+                                             value='{}'.format(stream_time.astimezone(universaltz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Eastern Time',
+                                             value='{}'.format(stream_time.astimezone(easterntz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Central Time',
+                                             value='{}'.format(stream_time.astimezone(centraltz).strftime("%Y-%m-%d %I:%M%p")))
+                announcement_embed.add_field(name='Pacific Time',
+                                             value='{}'.format(stream_time.astimezone(pacifictz).strftime("%Y-%m-%d %I:%M%p")))
 
-                announcement_embed.set_author(name='Upcoming Stream', icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
+                announcement_embed.set_author(name='Upcoming Stream',
+                                              icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
                 announcement_embed.set_image(url=page.find("meta", attrs={"property": "og:image"})['content'])
 
-                announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name), icon_url=ctx.author.avatar_url)
+                announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
+                                              icon_url=ctx.author.avatar_url)
 
                 await stream_channel.send(embed=announcement_embed)
             except ValueError:
