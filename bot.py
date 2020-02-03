@@ -127,8 +127,6 @@ async def on_message(message):
     # don't respond to ourselves
     if message.author == bot.user:
         return
-    if 'cod' in message.content.lower():
-        await message.add_reaction('🐟')
     if 'reina' in message.content.lower() and 'cute' in message.content.lower():
         await message.add_reaction('♥️')
 
