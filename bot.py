@@ -346,13 +346,14 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce(self, ctx, person, planned_time):
+    async def announce(self, ctx, person, date, planned_time):
         """
         (Mod-only command) Make stream announcements.
 
         Make stream announcements at #227 streams.
 
         person: use members' first name, or use "Nananiji" for Nananiji Room stream.
+        date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
         planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
 
         Please note that when executing the command, the stream will need to be happening TODAY in Japan.
@@ -375,7 +376,16 @@ class Mods(commands.Cog):
 
                 parsed_time = time.strptime(planned_time, "%H:%M")
 
-                stream_time = jptz.localize(datetime.datetime(year=now.year, month=now.month, day=now.day, hour=parsed_time.tm_hour, minute=parsed_time.tm_min))
+                stream_time = jptz.localize(datetime.datetime(year=now.year,
+                                                              month=now.month,
+                                                              day=now.day,
+                                                              hour=parsed_time.tm_hour,
+                                                              minute=parsed_time.tm_min))
+
+                if date == "tomorrow":
+                    stream_time = stream_time + datetime.timedelta(days=1)
+                else:
+                    pass
 
                 announcement_embed = discord.Embed(title="**{}**".format(stream_links[person][0]),
                                                    type='rich',
