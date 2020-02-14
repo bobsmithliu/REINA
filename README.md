@@ -1,6 +1,6 @@
 # REINA
 
-R.E.I.N.A. ver 1.14
+R.E.I.N.A. ver 1.15
 
 Roles and Entertainment Information and Notification Agent
 

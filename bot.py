@@ -4,7 +4,7 @@ import datetime
 import pytz
 import time
 import bs4
-import requests
+import aiohttp
 
 import TOKEN
 
@@ -17,7 +17,7 @@ easterntz = pytz.timezone('America/New_York')
 
 reina = discord.Game(">help")
 bot_description = '''
-R.E.I.N.A. 1.14
+R.E.I.N.A. 1.15
 
 Roles and Entertainment Information and Notification Agent
 
@@ -371,8 +371,10 @@ class Mods(commands.Cog):
             now = datetime.datetime.now(jptz)
 
             try:
-                result = requests.get(stream_links[person][1], headers=headers)
-                page = bs4.BeautifulSoup(result.content, "html.parser")
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(stream_links[person][1], headers=headers) as r:
+                        if r.status == 200:
+                            page = bs4.BeautifulSoup(r.text(), "html.parser")
 
                 parsed_time = time.strptime(planned_time, "%H:%M")
 
@@ -410,7 +412,9 @@ class Mods(commands.Cog):
                 announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
                                               icon_url=ctx.author.avatar_url)
 
-                await stream_channel.send(embed=announcement_embed)
+                stream_msg = await stream_channel.send(embed=announcement_embed)
+
+                await stream_channel.pin(stream_msg)
             except ValueError:
                 await ctx.send("Something happened, please report it to the developer. ")
 
