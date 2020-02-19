@@ -1,3 +1,5 @@
+import asyncio
+
 import discord
 from discord.ext import commands
 import datetime
@@ -8,16 +10,9 @@ import aiohttp
 
 import TOKEN
 
-jptz = pytz.timezone('Asia/Tokyo')
-universaltz = pytz.timezone('UTC')
-pacifictz = pytz.timezone('America/Los_Angeles')
-centraltz = pytz.timezone('America/Chicago')
-easterntz = pytz.timezone('America/New_York')
 
-
-reina = discord.Game(">help")
 bot_description = '''
-R.E.I.N.A. 1.15
+R.E.I.N.A. 1.16
 
 Roles and Entertainment Information and Notification Agent
 
@@ -25,6 +20,17 @@ Open source at: https://github.com/Skk-nsmt/REINA
 '''
 bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True)
 
+# -----------------------------------
+# |                                 |
+# |       Below are constants       |
+# |                                 |
+# -----------------------------------
+
+jptz = pytz.timezone('Asia/Tokyo')
+universaltz = pytz.timezone('UTC')
+pacifictz = pytz.timezone('America/Los_Angeles')
+centraltz = pytz.timezone('America/Chicago')
+easterntz = pytz.timezone('America/New_York')
 
 sub_roles_id = {
     'Tamago': 497370840824807424,
@@ -97,6 +103,10 @@ stream_links = {
     'Nananiji': ['Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
 }
 
+# Constants ends here
+
+# Checking functions
+
 
 def check_if_bot_spam():
     async def predicate(ctx):
@@ -119,7 +129,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await bot.change_presence(status=discord.Status.online, activity=reina)
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(">help"))
 
 
 @bot.listen()
@@ -148,7 +158,14 @@ class Default(commands.Cog):
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
+            await asyncio.sleep(1)
+            for i in range(4, 0, -1):
+                await message.edit(
+                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
+                await asyncio.sleep(1)
+            await message.delete()
+            await ctx.message.delete()
 
 
 class Roles(commands.Cog):
@@ -240,7 +257,14 @@ class Roles(commands.Cog):
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
+            await asyncio.sleep(1)
+            for i in range(4, 0, -1):
+                await message.edit(
+                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
+                await asyncio.sleep(1)
+            await message.delete()
+            await ctx.message.delete()
 
 
 class Kuraten(commands.Cog):
@@ -279,7 +303,14 @@ class Kuraten(commands.Cog):
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
+            await asyncio.sleep(1)
+            for i in range(4, 0, -1):
+                await message.edit(
+                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
+                await asyncio.sleep(1)
+            await message.delete()
+            await ctx.message.delete()
 
 
 class Anime(commands.Cog):
@@ -318,7 +349,14 @@ class Anime(commands.Cog):
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
+            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
+            await asyncio.sleep(1)
+            for i in range(4, 0, -1):
+                await message.edit(
+                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
+                await asyncio.sleep(1)
+            await message.delete()
+            await ctx.message.delete()
 
 
 class Mods(commands.Cog):
@@ -331,6 +369,7 @@ class Mods(commands.Cog):
     async def protect(self, ctx):
         """
         (Mod-only command) Do mystery things.
+        Note: this is an on-off switch command.
         """
         global new_member_loaded
 
@@ -422,11 +461,18 @@ class Mods(commands.Cog):
             await ctx.send("Illegal name.")
 
     @announce.error
+    @protect.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}'.format(bot_channel.mention))
-
+            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
+            await asyncio.sleep(1)
+            for i in range(4, 0, -1):
+                await message.edit(
+                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
+                await asyncio.sleep(1)
+            await message.delete()
+            await ctx.message.delete()
 
 bot.load_extension("authentication")
 new_member_loaded = True

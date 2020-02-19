@@ -8,13 +8,6 @@ class Authentication(commands.Cog):
         self._last_member = None
 
     @commands.command()
-    async def hello(self, ctx):
-        """
-        Does basically nothing other than greeting you.
-        """
-        await ctx.send('Hello {0.display_name}.'.format(ctx.author))
-
-    @commands.command()
     @commands.dm_only()
     async def rule_acknowledged(self, ctx):
         user_id = ctx.author.id
