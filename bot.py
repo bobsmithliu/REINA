@@ -413,7 +413,7 @@ class Mods(commands.Cog):
                 async with aiohttp.ClientSession() as session:
                     async with session.get(stream_links[person][1], headers=headers) as r:
                         if r.status == 200:
-                            page = bs4.BeautifulSoup(r.text(), "html.parser")
+                            page = bs4.BeautifulSoup(await r.text(), "html.parser")
 
                 parsed_time = time.strptime(planned_time, "%H:%M")
 
