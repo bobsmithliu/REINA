@@ -399,7 +399,6 @@ class Mods(commands.Cog):
         """
         stream_channel = discord.utils.get(ctx.guild.channels, name='227-streams')
         await stream_channel.trigger_typing()
-        await ctx.trigger_typing()
 
         headers = {
             'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.62 Safari/537.36",
@@ -453,7 +452,7 @@ class Mods(commands.Cog):
 
                 stream_msg = await stream_channel.send(embed=announcement_embed)
 
-                await stream_channel.pin(stream_msg)
+                await stream_msg.pin()
             except ValueError:
                 await ctx.send("Something happened, please report it to the developer. ")
 
@@ -473,6 +472,7 @@ class Mods(commands.Cog):
                 await asyncio.sleep(1)
             await message.delete()
             await ctx.message.delete()
+
 
 bot.load_extension("authentication")
 new_member_loaded = True
