@@ -7,16 +7,19 @@ import pytz
 import time
 import bs4
 import aiohttp
+from textblob import TextBlob
 
 import TOKEN
 
 
 bot_description = '''
-R.E.I.N.A. 1.17
+R.E.I.N.A. 1.18
 
 Roles and Entertainment Information and Notification Agent
 
 Open source at: https://github.com/Skk-nsmt/REINA
+
+@Skk#9753
 '''
 bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True)
 
@@ -137,8 +140,12 @@ async def on_message(message):
     # don't respond to ourselves
     if message.author == bot.user:
         return
-    if 'reina' in message.content.lower() and 'cute' in message.content.lower():
-        await message.add_reaction('♥️')
+    if "reina" in message.content.lower():
+        text = TextBlob(message.content.lower())
+        if text.polarity >= 0.2:
+            await message.add_reaction('♥️')
+        if text.polarity < 0:
+            await message.add_reaction('💔')
 
 
 class Default(commands.Cog):
