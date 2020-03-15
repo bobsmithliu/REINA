@@ -227,6 +227,7 @@ class Default(commands.Cog):
         await ctx.send("Hi! {}".format(ctx.author.display_name))
 
     @commands.command()
+    @check_if_bot_spam()
     async def rand_lyrics(self, ctx):
         """
         Print out random lyrics from 22/7 songs.
