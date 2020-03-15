@@ -7,13 +7,13 @@ import pytz
 import time
 import bs4
 import aiohttp
+import random
 from textblob import TextBlob
 
 import TOKEN
 
-
 bot_description = '''
-R.E.I.N.A. 1.18
+R.E.I.N.A. 1.19
 
 Roles and Entertainment Information and Notification Agent
 
@@ -99,12 +99,75 @@ stream_links = {
     'Sally': ['Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()],
     'Aina': ['Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()],
     'Kanae': ['Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple()],
-    'Urara': ['Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242)],
+    'Urara': ['Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19',
+              discord.Color.from_rgb(230, 136, 242)],
     'Moe': ['Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta()],
     'Mizuha': ['Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()],
     'Nagomi': ['Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)],
     'Nananiji': ['Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
 }
+
+lyrics = {
+    "僕は存在していなかった":
+        ["僕は自分を信じていない \n自分の存在　知られたくなかった",
+         "風が吹く日は　その風が止むまで \n部屋から出るなんて考えたこともない",
+         "心の窓にはカーテンを引いて \n世界の隅でそっと息をしてた",
+         "夢見るってことは　何かを期待すること \n傷つくくらいなら　夢なんか見たくない",
+         "僕は色を持たない花 \n君とまたすれ違っても \nきっと僕を思い出せないだろう \n好きと言ってはダメなんだ",
+         "青い空よりどこまでも澄んだ \n自由の意味を知るやさしい眼差しで",
+         "孤独な窓を何度も叩いて \n世界の広さ君は教えてくれた",
+         "必要とされるのは生きてる意味を感じる \n雨風に打たれても生まれ変われる",
+         "僕も色を持ってた花 \nやっと今さら気づいたよ \n君が僕に光をくれたんだ \n好きと言ってもいいのかな",
+         "すべては他人事 (ひとごと) のようでも \n君だけは愛を見捨てずに \nどこからか　僕を呼ぶ声が聴こえる",
+         "他の花と比べていた \nずっと一人絶望して \nどんな花も色があるように \n僕には僕の色がある",
+         "僕は自分を信じ始めた \n今なら好きだと言えるかもしれない"],
+    "やさしい記憶":
+        ["狭い校庭のフェンスの脇 \n咲いてた花の名前 なんて言ったっけ？ \nみんな知らなくて調べたんだ \n僕の植物図鑑 片隅に載ってた",
+         "忘れることって便利だと思う \nクラスメイトの誰かまで \nどこかに消えてしまったよ",
+         "やさしい記憶なんて あやふやで \nこれ以上 僕のこと傷つけはしない \n悲しいことは きっと勘違い \n人に聞いたのを信じ込んだだけ \n終わったことなんか終わったままでいいよ",
+         "夏の教室の日差しの中 \n窓際の君のこと いつも盗み見た \n何も言い出せず 秋になって \nやがて心の花も枯れてしまったよ",
+         "覚えてないのは悲しいからだろう \n過ぎた月日の思いやり \nあの日の自分は嫌いだ",
+         "ホントの記憶 どこかぼんやりと \n切ないベールで守ってくれてる \n真実なんてどうだっていいことなのか？ \n人はそう過去を美化してしまうよ \n未来はいつだって上書きのためにある",
+         "やさしい記憶なんて あやふやで \nこれ以上 僕のこと傷つけはしない \n大事なことは ある日 振り向けば \nほんの一瞬だけ 思い出すものさ \nどうでもいいことなんかどこにもないと知った"],
+    "未来があるから":
+        ["誰かに手首をぎゅっと掴まれて \n行くなと言われて引き留められる \nそういう経験したことあるかい？ \nもちろん愛だとわかってはいても…",
+         "抵抗したのはなぜだったのか？ \n腕を振り切ったのは　プライドに似た変な意地だ",
+         "君が思ってるより　僕はいい人じゃない \n嘘はついていないけど正直でもない \n君が知ってる僕は　本当の僕じゃない \n自分でも呆れるほど自分が好きになれない",
+         "未来があるからいいじゃない？ \n振り向きざま \n僕に言うつもりか",
+         "事実がどうでも関係ないなんて \n勝手な理屈と思ってしまう \n何より大事な基準はいつでも \n白とか黒とか二つに一つだ",
+         "逃走したのはどうしてなのか？ \n裏切られたとしても　そう簡単に傷つくものか？",
+         "君が信じてくれても　僕は悪い人間だ \n愛が真実かなんてどうでもいいこと \n君の知らない僕が　この世界にいたんだ \nさあ今なら間に合うよ　すべてを忘れて欲しい",
+         "未来というのはでまかせだ \n目を見ながら \nちゃんと言えるのかなあ"],
+    "何もしてあげられない":
+        ["一枚の枝の葉が吹き抜ける風に揺れ\nひらひらと宙を舞い　舗道へと落ちて行く",
+         "そう僕は偶然にその場所に居合わせて\n知らぬ間に罪もない他人 (ひと) のこと踏んでいる",
+         "誰かの嘆きや痛みに\n耳を傾けることなく\n傲慢に生きて来て\nごめんなさい",
+         "何もしてあげられなくて　遠巻きに見るしかなくて\n涙どれだけ流しても他人事だろう",
+         "僕が生きてるその意味を　ずっと考えてみたけど\nただ一つ願ってた君のことさえ守れなかった",
+         "人混みを避けながら　今までは歩いてた\nぶつかってしまったら悪いって思ってた\nでもそれは　本当のやさしさと違うんだ\n気づかずに傷つけることだってあったはず",
+         "意識してるかしてないか\n人間 (ひと) は迷惑かけるもの\n友達は欲しくない\nいけませんか？",
+         "何も望んでなどいない　愛なんて面倒だった\nだってきっと愛されたら愛すべきだろう",
+         "僕が拒否してた世界　ドアを頑なに閉めてた\nそう助け求めてた君を孤独に突き放したまま",
+         "残酷なアスファルトに消えた君のその叫び\nどこかから聴こえるよ\n踏んでしまった運命よ",
+         "何もしてあげられなくて　遠巻きに見るしかなくて\n涙どれだけ流しても他人事だろう",
+         "僕が生きてるその意味を　ずっと考えてみたけど\nただ一つ願ってた君のことさえ守れなかった"],
+    "ムズイ":
+        ["「大人たちは簡単に言うけど… \n私にとっての希望って　どこにあるの？」",
+         "途切れることのない車の往来に \n国道　渡れなかった \n誰かの言葉とか　冷たい眼差しに \n心が萎縮するように…",
+         "夢なんかを見ていたって \n傷つくだけだと身にしみた",
+         "「自分がどこにいるのかわからない　何も見えない世界で途方に暮れている \nどっちに向かって進めばいいの？もうどこへも歩きたくない」",
+         "ねえどうして　(人は)　生きていかなきゃいけないの？　(教えて) \n命って　(命って)　何のためにあるの？",
+         "自信がない　(私)　これからどう生きればいい？　(孤独よ) \nだって人生が長すぎる \n「ムズイよ」",
+         "教室のカーテン　漏らしたため息に \n何度も膨らみ萎 (しぼ) む \nつまらない授業もただのクラスメイトも \n何にも興味が持てない",
+         "日常から逃げ出すには \n一つしか方法がなかった",
+         "「優しい言葉なんか掛けないで　叶わない夢ばかり見てしまうから \nはっきり言って欲しい　すべては幻想なんだと」",
+         "ねえどうして (人は)　死にたくなっちゃいけないの？　(教えて) \n誰だって　(誰だって)　考えるでしょう？",
+         "私なんて　(きっと)　このままいなくなればいい　(さよなら) \n何を信じて生きるのだろう",
+         "なりたかった自分も　なれなかった自分も \n窓ガラスに映った泣いている自分も　全部自分だ",
+         "人は誰でも変われるって \n夢なんか見せないでよ"]
+
+}
+
 
 # Constants ends here
 
@@ -115,6 +178,7 @@ def check_if_bot_spam():
     async def predicate(ctx):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         return ctx.channel == bot_channel
+
     return commands.check(predicate)
 
 
@@ -123,6 +187,7 @@ def check_if_role_or_bot_spam():
         bot_channel = ctx.guild.get_channel(336287198510841856)
         role_channel = discord.utils.get(ctx.guild.channels, name='roles')
         return ctx.channel == bot_channel or ctx.channel == role_channel
+
     return commands.check(predicate)
 
 
@@ -144,7 +209,7 @@ async def on_message(message):
         text = TextBlob(message.content.lower())
         if text.polarity >= 0.2:
             await message.add_reaction('♥️')
-        if text.polarity < 0:
+        if text.polarity <= -0.2:
             await message.add_reaction('💔')
 
 
@@ -160,6 +225,16 @@ class Default(commands.Cog):
         Let R.E.I.N.A. greet you!
         """
         await ctx.send("Hi! {}".format(ctx.author.display_name))
+
+    @commands.command()
+    async def rand_lyrics(self, ctx):
+        """
+        Print out random lyrics from 22/7 songs.
+        """
+        random_song = random.choice(list(lyrics.keys()))
+        random_lyrics = "\n> ".join(("> " + random.choice(lyrics[random_song])).split("\n"))
+
+        await ctx.send("*{}* \nーー *「{}」*".format(random_lyrics, random_song))
 
     @hi.error
     async def command_error(self, ctx, error):
@@ -209,7 +284,8 @@ class Roles(commands.Cog):
                 elif main_roles:
                     await ctx.send("You can't have more than one main role!")
                 else:
-                    await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+                    await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                        datetime.datetime.utcnow()))
                     await ctx.send("Role added.")
             elif role_type == 'sub':
                 role = ctx.guild.get_role(sub_roles_id[role_name])
@@ -217,7 +293,8 @@ class Roles(commands.Cog):
                 if role in ctx.author.roles:
                     await ctx.send("You already have that role!")
                 else:
-                    await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+                    await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                        datetime.datetime.utcnow()))
                     await ctx.send("Role added.")
             else:
                 await ctx.send("Illegal operation.")
@@ -289,7 +366,8 @@ class Kuraten(commands.Cog):
         if kuraten_role in ctx.author.roles:
             await ctx.send("You already have that role!")
         else:
-            await ctx.author.add_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+            await ctx.author.add_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                datetime.datetime.utcnow()))
             await ctx.send("You have subscribed to Kuraten! notifications.")
 
     @commands.command()
@@ -302,7 +380,8 @@ class Kuraten(commands.Cog):
         if kuraten_role not in ctx.author.roles:
             await ctx.send("You don't have that role!")
         else:
-            await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+            await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to Kuraten! notifications.")
 
     @sub_kuraten.error
@@ -335,7 +414,8 @@ class Anime(commands.Cog):
         if anime_role in ctx.author.roles:
             await ctx.send("You already have that role!")
         else:
-            await ctx.author.add_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+            await ctx.author.add_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                datetime.datetime.utcnow()))
             await ctx.send("You have subscribed to anime notifications.")
 
     @commands.command()
@@ -348,7 +428,8 @@ class Anime(commands.Cog):
         if anime_role not in ctx.author.roles:
             await ctx.send("You don't have that role!")
         else:
-            await ctx.author.remove_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(datetime.datetime.utcnow()))
+            await ctx.author.remove_roles(anime_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+                datetime.datetime.utcnow()))
             await ctx.send("You have unsubscribed to anime notifications.")
 
     @sub_anime.error
@@ -490,13 +571,17 @@ class Mods(commands.Cog):
                 announcement_embed.add_field(name='Japan Time',
                                              value='{}'.format(stream_time.strftime("%Y-%m-%d %I:%M%p")))
                 announcement_embed.add_field(name='Universal Time',
-                                             value='{}'.format(stream_time.astimezone(universaltz).strftime("%Y-%m-%d %I:%M%p")))
+                                             value='{}'.format(
+                                                 stream_time.astimezone(universaltz).strftime("%Y-%m-%d %I:%M%p")))
                 announcement_embed.add_field(name='Eastern Time',
-                                             value='{}'.format(stream_time.astimezone(easterntz).strftime("%Y-%m-%d %I:%M%p")))
+                                             value='{}'.format(
+                                                 stream_time.astimezone(easterntz).strftime("%Y-%m-%d %I:%M%p")))
                 announcement_embed.add_field(name='Central Time',
-                                             value='{}'.format(stream_time.astimezone(centraltz).strftime("%Y-%m-%d %I:%M%p")))
+                                             value='{}'.format(
+                                                 stream_time.astimezone(centraltz).strftime("%Y-%m-%d %I:%M%p")))
                 announcement_embed.add_field(name='Pacific Time',
-                                             value='{}'.format(stream_time.astimezone(pacifictz).strftime("%Y-%m-%d %I:%M%p")))
+                                             value='{}'.format(
+                                                 stream_time.astimezone(pacifictz).strftime("%Y-%m-%d %I:%M%p")))
 
                 announcement_embed.set_author(name='Upcoming Stream',
                                               icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
