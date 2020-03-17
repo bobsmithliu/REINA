@@ -89,7 +89,7 @@ main_roles_id = {
 }
 acceptable_roles = ['Tamago', 'Tsubomi', 'Ainacchi', 'Rettan', 'Mikami', 'Moe', 'Ayaka', 'Reinyan', 'Reika',
                     'Chiharun', 'Nicole', 'Meimei', 'Miu', 'Nagomin', 'Akane', 'Kanaeru', 'Miyako', 'Mizzy',
-                    'Jun', 'Ruri', 'Sakura', 'Sally', 'Uta']
+                    'Jun', 'Ruri', 'Sakura', 'Sally', 'Uta', 'Yuki']
 stream_links = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
