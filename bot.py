@@ -59,7 +59,11 @@ sub_roles_id = {
     'Ruri': 466162700880183307,
     'Sakura': 466162595817193482,
     'Sally': 466162519447437312,
-    'Uta': 659171909723750405
+    'Uta': 659171909723750405,
+    'Gouda': 689628756968472576,
+    'Kaoruko': 691153598884741131,
+    'Nana': 691153793626144779,
+    'Miko': 691154105208537168
 }
 main_roles_id = {
     'Tamago': 497370864254320670,
@@ -85,11 +89,15 @@ main_roles_id = {
     'Ruri': 466159773604249611,
     'Sakura': 466159732235829249,
     'Sally': 466159611179958273,
-    'Uta': 659171144028520475
+    'Uta': 659171144028520475,
+    'Gouda': 689629655548035156,
+    'Kaoruko': 691153281820524605,
+    'Nana': 691153662415863849,
+    'Miko': 691154027534221323
 }
-acceptable_roles = ['Tamago', 'Tsubomi', 'Ainacchi', 'Rettan', 'Mikami', 'Moe', 'Ayaka', 'Reinyan', 'Reika',
-                    'Chiharun', 'Nicole', 'Meimei', 'Miu', 'Nagomin', 'Akane', 'Kanaeru', 'Miyako', 'Mizzy',
-                    'Jun', 'Ruri', 'Sakura', 'Sally', 'Uta']
+
+acceptable_roles = main_roles_id.keys()
+
 stream_links = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
@@ -269,7 +277,7 @@ class Roles(commands.Cog):
         E.g.: ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
 
         Only the following roles may be added:
-        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
+        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko
         """
         role_name = role_name.capitalize()
 
@@ -314,7 +322,7 @@ class Roles(commands.Cog):
         E.g.: ">unrole main Sally" will remove Sally as your main role. If, say, you have Meimei as a sub role, your nametag colour will then be light blue until you add a new main role.
 
         Only the following roles may be deleted:
-        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago
+        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko
         """
         role_name = role_name.capitalize()
 
