@@ -628,8 +628,8 @@ new_member_loaded = True
 
 bot.add_cog(Default(bot))
 bot.add_cog(Roles(bot))
-bot.add_cog(Kuraten(bot))
+# bot.add_cog(Kuraten(bot))
 bot.add_cog(Keisanchuu(bot))
-bot.add_cog(Anime(bot))
+# bot.add_cog(Anime(bot))
 bot.add_cog(Mods(bot))
 bot.run(TOKEN.TOKEN)
