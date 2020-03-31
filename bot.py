@@ -13,7 +13,7 @@ from textblob import TextBlob
 import TOKEN
 
 bot_description = '''
-R.E.I.N.A. 1.19
+R.E.I.N.A. 1.20
 
 Roles and Entertainment Information and Notification Agent
 
@@ -360,41 +360,41 @@ class Roles(commands.Cog):
             await ctx.message.delete()
 
 
-class Kuraten(commands.Cog):
+class Wariraji(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
 
     @commands.command()
     @check_if_bot_spam()
-    async def sub_kuraten(self, ctx):
+    async def sub_wariraji(self, ctx):
         """
-        Subscribe to Kuraten! notifications.
+        Subscribe to Warikirenai Radio notifications.
         """
-        kuraten_role = ctx.guild.get_role(641113337186222080)
-        if kuraten_role in ctx.author.roles:
+        radio_role = ctx.guild.get_role(694627966495490078)
+        if radio_role in ctx.author.roles:
             await ctx.send("You already have that role!")
         else:
-            await ctx.author.add_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+            await ctx.author.add_roles(radio_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have subscribed to Kuraten! notifications.")
+            await ctx.send("You have subscribed to Warikirenai Radio notifications.")
 
     @commands.command()
     @check_if_bot_spam()
-    async def unsub_kuraten(self, ctx):
+    async def unsub_wariraji(self, ctx):
         """
-        Unsubscribe to Kuraten! notifications.
+        Unsubscribe to Warikirenai Radio notifications.
         """
-        kuraten_role = ctx.guild.get_role(641113337186222080)
-        if kuraten_role not in ctx.author.roles:
+        radio_role = ctx.guild.get_role(694627966495490078)
+        if radio_role not in ctx.author.roles:
             await ctx.send("You don't have that role!")
         else:
-            await ctx.author.remove_roles(kuraten_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
+            await ctx.author.remove_roles(radio_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have unsubscribed to Kuraten! notifications.")
+            await ctx.send("You have unsubscribed to Warikirenai Radio notifications.")
 
-    @sub_kuraten.error
-    @unsub_kuraten.error
+    @sub_wariraji.error
+    @unsub_wariraji.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
@@ -628,7 +628,7 @@ new_member_loaded = True
 
 bot.add_cog(Default(bot))
 bot.add_cog(Roles(bot))
-# bot.add_cog(Kuraten(bot))
+bot.add_cog(Wariraji(bot))
 bot.add_cog(Keisanchuu(bot))
 # bot.add_cog(Anime(bot))
 bot.add_cog(Mods(bot))
