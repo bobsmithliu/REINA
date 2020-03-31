@@ -369,7 +369,7 @@ class Wariraji(commands.Cog):
     @check_if_bot_spam()
     async def sub_wariraji(self, ctx):
         """
-        Subscribe to Warikirenai Radio notifications.
+        Subscribe to Warikirenai Radio Plus notifications.
         """
         radio_role = ctx.guild.get_role(694627966495490078)
         if radio_role in ctx.author.roles:
@@ -377,13 +377,13 @@ class Wariraji(commands.Cog):
         else:
             await ctx.author.add_roles(radio_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have subscribed to Warikirenai Radio notifications.")
+            await ctx.send("You have subscribed to Warikirenai Radio Plus notifications.")
 
     @commands.command()
     @check_if_bot_spam()
     async def unsub_wariraji(self, ctx):
         """
-        Unsubscribe to Warikirenai Radio notifications.
+        Unsubscribe to Warikirenai Radio Plus notifications.
         """
         radio_role = ctx.guild.get_role(694627966495490078)
         if radio_role not in ctx.author.roles:
@@ -391,7 +391,7 @@ class Wariraji(commands.Cog):
         else:
             await ctx.author.remove_roles(radio_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have unsubscribed to Warikirenai Radio notifications.")
+            await ctx.send("You have unsubscribed to Warikirenai Radio Plus notifications.")
 
     @sub_wariraji.error
     @unsub_wariraji.error

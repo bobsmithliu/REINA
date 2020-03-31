@@ -71,11 +71,11 @@ class MyClient(discord.Client):
                 await asyncio.sleep(0.2)
 
             # Radio 30 min alert
-            if now.weekday() == 6 and now.hour == 10 and now.minute == 30 and now.second == 0:
+            if now.weekday() == 5 and now.hour == 15 and now.minute == 30 and now.second == 0:
                 await radio_channel.trigger_typing()
-                alert_embed = discord.Embed(title='Kuraten! Reminder',
+                alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
                                             type='rich',
-                                            description="**Hey guys!** Time now is `{}`, This week's {} will start in **30 minutes**. \n\n"
+                                            description="**Hey guys!** Time now is `{}`, This week's {} Plus will start in **30 minutes**. \n\n"
                                                         "If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n"
                                                         "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(
                                                 now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention))
@@ -90,12 +90,12 @@ class MyClient(discord.Client):
                 await asyncio.sleep(0.2)
 
             # Radio 5 min alert
-            if now.weekday() == 6 and now.hour == 10 and now.minute == 55 and now.second == 0:
+            if now.weekday() == 5 and now.hour == 15 and now.minute == 55 and now.second == 0:
                 await radio_channel.trigger_typing()
 
-                alert_embed = discord.Embed(title='Kuraten! Reminder',
+                alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
                                             type='rich',
-                                            description="**Hey guys!** Time now is `{}`, This week's {} will start in **5 minutes**. \n\n"
+                                            description="**Hey guys!** Time now is `{}`, This week's {} Plus will start in **5 minutes**. \n\n"
                                                         "If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n"
                                                         "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(
                                                 now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention))
