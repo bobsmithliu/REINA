@@ -18,8 +18,7 @@ R.E.I.N.A. 1.20
 Roles and Entertainment Information and Notification Agent
 
 Open source at: https://github.com/Skk-nsmt/REINA
-
-@Skk#9753
+Licensed under WTFPL
 '''
 bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True)
 
