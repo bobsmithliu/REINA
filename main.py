@@ -24,17 +24,17 @@ class MyClient(discord.Client):
 
     async def my_background_task(self):
         await self.wait_until_ready()
+
+        tv_radio_channel = self.get_channel(465158208978157588)
+        keisanchuu_role = tv_radio_channel.guild.get_role(641112458291052584)
+        radio_role = tv_radio_channel.guild.get_role(694627966495490078)
+
         while not self.is_closed():
             now = datetime.datetime.now(jptz)
 
-            channel = self.get_channel(465158208978157588)
-            radio_channel = self.get_channel(465158208978157588)
-            keisanchuu_role = channel.guild.get_role(641112458291052584)
-            radio_role = channel.guild.get_role(694627966495490078)
-
             # Keisanchuu 30 min alert
             if now.weekday() == 5 and now.hour == 22 and now.minute == 30 and now.second == 0:
-                await channel.trigger_typing()
+                await tv_radio_channel.trigger_typing()
 
                 alert_embed = discord.Embed(title="Keisanchu Reminder",
                                             type='rich',
@@ -47,13 +47,13 @@ class MyClient(discord.Client):
 
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
 
-                await channel.send(embed=alert_embed)
+                await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
             # Keisanchuu 5 min alert
             if now.weekday() == 5 and now.hour == 22 and now.minute == 55 and now.second == 0:
-                await channel.trigger_typing()
+                await tv_radio_channel.trigger_typing()
 
                 alert_embed = discord.Embed(title="Keisanchu Reminder",
                                             type='rich',
@@ -66,13 +66,13 @@ class MyClient(discord.Client):
 
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
 
-                await channel.send(embed=alert_embed)
+                await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
             # Radio 30 min alert
             if now.weekday() == 5 and now.hour == 15 and now.minute == 30 and now.second == 0:
-                await radio_channel.trigger_typing()
+                await tv_radio_channel.trigger_typing()
                 alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
                                             type='rich',
                                             description="**Hey guys!** Time now is `{}`, This week's {} Plus will start in **30 minutes**. \n\n"
@@ -85,13 +85,13 @@ class MyClient(discord.Client):
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://pbs.twimg.com/media/EUcZFgcUUAA43Rp?format=jpg&name=small')
 
-                await radio_channel.send(content=radio_role.mention, embed=alert_embed)
+                await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
             # Radio 5 min alert
             if now.weekday() == 5 and now.hour == 15 and now.minute == 55 and now.second == 0:
-                await radio_channel.trigger_typing()
+                await tv_radio_channel.trigger_typing()
 
                 alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
                                             type='rich',
@@ -105,7 +105,7 @@ class MyClient(discord.Client):
                 alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
                 alert_embed.set_image(url='https://pbs.twimg.com/media/EUcZFgcUUAA43Rp?format=jpg&name=small')
 
-                await radio_channel.send(content=radio_role.mention, embed=alert_embed)
+                await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
             else:
                 await asyncio.sleep(0.2)
 
