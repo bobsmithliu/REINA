@@ -29,6 +29,9 @@ class MyClient(discord.Client):
         keisanchuu_role = tv_radio_channel.guild.get_role(641112458291052584)
         radio_role = tv_radio_channel.guild.get_role(694627966495490078)
 
+        print("now sending timed message to channel {}".format(tv_radio_channel.name))
+        print("Background Task engaged.")
+
         while not self.is_closed():
             now = datetime.datetime.now(jptz)
 
