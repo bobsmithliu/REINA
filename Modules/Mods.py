@@ -104,7 +104,6 @@ class Mods(commands.Cog):
             await ctx.send("Illegal name.")
 
     @announce.error
-    @protect.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):

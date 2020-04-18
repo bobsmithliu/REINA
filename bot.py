@@ -67,7 +67,7 @@ class Special(commands.Cog):
             await ctx.send("Loaded. ")
 
 
-bot.load_extension("authentication")
+bot.load_extension("Modules.Authentication")
 new_member_loaded = True
 
 bot.add_cog(Default(bot))
