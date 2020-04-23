@@ -5,6 +5,7 @@ import aiohttp
 import bs4
 import discord
 import pytz
+import time
 from discord.ext import commands
 
 from Modules import CONSTANT
@@ -29,7 +30,7 @@ class Mods(commands.Cog):
         """
         (Mod-only command) Make stream announcements.
 
-        Make stream announcements at #227 streams.
+        Make stream announcements at #227-streams.
 
         person: use members' first name, or use "Nananiji" for Nananiji Room stream.
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
@@ -37,8 +38,7 @@ class Mods(commands.Cog):
 
         Please note that when executing the command, the stream will need to be happening TODAY in Japan.
         """
-        stream_channel = discord.utils.get(ctx.guild.channels, name='227-streams')
-        await stream_channel.trigger_typing()
+        stream_channel = ctx.guild.get_channel(336281736633909258)
 
         headers = {
             'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.62 Safari/537.36",
@@ -46,6 +46,7 @@ class Mods(commands.Cog):
         }
 
         if person in CONSTANT.stream_links:
+            await stream_channel.trigger_typing()
             now = datetime.datetime.now(jptz)
 
             try:
@@ -54,7 +55,7 @@ class Mods(commands.Cog):
                         if r.status == 200:
                             page = bs4.BeautifulSoup(await r.text(), "html.parser")
 
-                parsed_time = datetime.time.strptime(planned_time, "%H:%M")
+                parsed_time = time.strptime(planned_time, "%H:%M")
 
                 stream_time = jptz.localize(datetime.datetime(year=now.year,
                                                               month=now.month,
