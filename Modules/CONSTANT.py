@@ -63,7 +63,7 @@ main_roles_id = {
 
 acceptable_roles = main_roles_id.keys()
 
-stream_links = {
+showroom_stream_links = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
     'Mei': ['Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()],
@@ -72,12 +72,21 @@ stream_links = {
     'Sally': ['Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()],
     'Aina': ['Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()],
     'Kanae': ['Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple()],
-    'Urara': ['Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19',
-              discord.Color.from_rgb(230, 136, 242)],
+    'Urara': ['Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242)],
     'Moe': ['Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta()],
     'Mizuha': ['Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()],
     'Nagomi': ['Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)],
     'Nananiji': ['Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
+}
+
+instagram_stream_links = {
+    'Chiharu': ['Hokaze Chiharu', 'https://www.instagram.com/c_rurun410/live', discord.Color.red()],
+    'Reina': ['Miyase Reina', 'https://www.instagram.com/reinyan_0526/live', discord.Color.dark_magenta()],
+    'Sally': ['Amaki Sally', 'https://www.instagram.com/sallyamaki/live', discord.Color.gold()],
+    'Aina': ['Takeda Aina', 'https://www.instagram.com/___aina35_____/live', discord.Color.teal()],
+    'Kanae': ['Shirosawa Kanae', 'https://www.instagram.com/__shiro227/live', discord.Color.purple()],
+    'Urara': ['Takatsuji Urara', 'https://www.instagram.com/urara_tantan/live', discord.Color.from_rgb(230, 136, 242)],
+    'Moe': ['Suzuhana Moe', 'https://www.instagram.com/moepiyo227/live', discord.Color.magenta()],
 }
 
 lyrics = {

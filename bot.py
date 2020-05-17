@@ -10,7 +10,7 @@ from Modules.Roles import Roles
 from Modules.Wariraji import Wariraji
 
 bot_description = '''
-R.E.I.N.A. 1.21
+R.E.I.N.A. 1.22
 
 Roles and Entertainment Information and Notification Agent
 

@@ -17,6 +17,15 @@ pacifictz = pytz.timezone('America/Los_Angeles')
 centraltz = pytz.timezone('America/Chicago')
 easterntz = pytz.timezone('America/New_York')
 
+timezones = [
+    ("Japan Time", jptz),
+    ("Universal Time", universaltz),
+    ("Pacific Time", pacifictz),
+    ("Central Time", centraltz),
+    ("Eastern Time", easterntz)]
+
+time_format_string = "%Y-%m-%d %I:%M%p"
+
 
 class Mods(commands.Cog):
     def __init__(self, bot):
@@ -26,17 +35,15 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce(self, ctx, person, date, planned_time):
+    async def announce_sr(self, ctx, person, date, planned_time):
         """
-        (Mod-only command) Make stream announcements.
+        (Mod-only command) Make Showroom stream announcements.
 
-        Make stream announcements at #227-streams.
+        Make Showroom stream announcements at #227-streams.
 
-        person: use members' first name, or use "Nananiji" for Nananiji Room stream.
+        person: use members' first name, or use "Nananiji" for Nananiji Room stream on Showroom.
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
         planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
-
-        Please note that when executing the command, the stream will need to be happening TODAY in Japan.
         """
         stream_channel = ctx.guild.get_channel(336281736633909258)
 
@@ -45,17 +52,21 @@ class Mods(commands.Cog):
             'Referer': "https://www.showroom-live.com"
         }
 
-        if person in CONSTANT.stream_links:
+        if person in CONSTANT.showroom_stream_links:
             await stream_channel.trigger_typing()
             now = datetime.datetime.now(jptz)
 
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(CONSTANT.stream_links[person][1], headers=headers) as r:
+                    async with session.get(CONSTANT.showroom_stream_links[person][1], headers=headers) as r:
                         if r.status == 200:
                             page = bs4.BeautifulSoup(await r.text(), "html.parser")
 
-                parsed_time = time.strptime(planned_time, "%H:%M")
+                try:
+                    parsed_time = time.strptime(planned_time, "%H:%M")
+                except ValueError:
+                    await ctx.send("Time cannot be parsed. ")
+                    return
 
                 stream_time = jptz.localize(datetime.datetime(year=now.year,
                                                               month=now.month,
@@ -65,30 +76,16 @@ class Mods(commands.Cog):
 
                 if date == "tomorrow":
                     stream_time = stream_time + datetime.timedelta(days=1)
-                else:
-                    pass
 
-                announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.stream_links[person][0]),
+                announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.showroom_stream_links[person][0]),
                                                    type='rich',
-                                                   description='{}'.format(CONSTANT.stream_links[person][1]),
-                                                   color=CONSTANT.stream_links[person][2])
+                                                   description='{}'.format(CONSTANT.showroom_stream_links[person][1]),
+                                                   color=CONSTANT.showroom_stream_links[person][2])
 
-                announcement_embed.add_field(name='Japan Time',
-                                             value='{}'.format(stream_time.strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Universal Time',
-                                             value='{}'.format(
-                                                 stream_time.astimezone(universaltz).strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Eastern Time',
-                                             value='{}'.format(
-                                                 stream_time.astimezone(easterntz).strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Central Time',
-                                             value='{}'.format(
-                                                 stream_time.astimezone(centraltz).strftime("%Y-%m-%d %I:%M%p")))
-                announcement_embed.add_field(name='Pacific Time',
-                                             value='{}'.format(
-                                                 stream_time.astimezone(pacifictz).strftime("%Y-%m-%d %I:%M%p")))
+                for tz in timezones:
+                    announcement_embed.add_field(name=tz[0], value=stream_time.astimezone(tz[1]).strftime(time_format_string))
 
-                announcement_embed.set_author(name='Upcoming Stream',
+                announcement_embed.set_author(name='Upcoming Showroom Stream',
                                               icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
                 announcement_embed.set_image(url=page.find("meta", attrs={"property": "og:image"})['content'])
 
@@ -99,12 +96,68 @@ class Mods(commands.Cog):
 
                 await stream_msg.pin()
             except ValueError:
-                await ctx.send("Something happened, please report it to the developer. ")
+                await ctx.send("HTTP request to Showroom website failed. ")
 
         else:
             await ctx.send("Illegal name.")
 
-    @announce.error
+    @commands.command()
+    @commands.has_any_role('Moderators', 'Disciplinary Committee')
+    @check_if_bot_spam()
+    async def announce_insta(self, ctx, person, date, planned_time):
+        """
+        (Mod-only command) Make Instagram stream announcements.
+
+        Make Instagram stream announcements at #227-streams.
+
+        person: use members' first name.
+        date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
+        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+        """
+        stream_channel = ctx.guild.get_channel(336281736633909258)
+
+        if person in CONSTANT.instagram_stream_links:
+            await stream_channel.trigger_typing()
+            now = datetime.datetime.now(jptz)
+
+            try:
+                parsed_time = time.strptime(planned_time, "%H:%M")
+            except ValueError:
+                await ctx.send("Time cannot be parsed. ")
+                return
+
+            stream_time = jptz.localize(datetime.datetime(year=now.year,
+                                                          month=now.month,
+                                                          day=now.day,
+                                                          hour=parsed_time.tm_hour,
+                                                          minute=parsed_time.tm_min))
+
+            if date == "tomorrow":
+                stream_time = stream_time + datetime.timedelta(days=1)
+
+            announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.instagram_stream_links[person][0]),
+                                               type='rich',
+                                               description='{}'.format(CONSTANT.instagram_stream_links[person][1]),
+                                               color=CONSTANT.instagram_stream_links[person][2])
+
+            for tz in timezones:
+                announcement_embed.add_field(name=tz[0],
+                                             value=stream_time.astimezone(tz[1]).strftime(time_format_string))
+
+            announcement_embed.set_author(name='Upcoming Instagram Stream',
+                                          icon_url="https://instagram.com/static/images/ico/apple-touch-icon-180x180-precomposed.png/c06fdb2357bd.png")
+
+            announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
+                                          icon_url=ctx.author.avatar_url)
+
+            stream_msg = await stream_channel.send(embed=announcement_embed)
+
+            await stream_msg.pin()
+        else:
+            await ctx.send("You've put an illegal name or this person does not have an Instagram account yet. ")
+
+    @announce_sr.error
+    @announce_insta.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
