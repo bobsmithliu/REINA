@@ -8,6 +8,7 @@ from Modules.Keisanchuu import Keisanchuu
 from Modules.Mods import Mods
 from Modules.Roles import Roles
 from Modules.Wariraji import Wariraji
+from Modules.MyHelp import MyHelp
 
 bot_description = '''
 R.E.I.N.A. 1.23
@@ -18,7 +19,7 @@ Open source at: https://github.com/Skk-nsmt/REINA
 Licensed under WTFPL
 '''
 
-bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True)
+bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True, help_command=MyHelp())
 
 
 @bot.listen()
