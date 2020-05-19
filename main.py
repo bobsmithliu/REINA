@@ -1,7 +1,8 @@
 import discord
-import asyncio
 import datetime
+import asyncio
 import pytz
+import schedule
 
 import TOKEN
 
@@ -22,95 +23,63 @@ class MyClient(discord.Client):
         new_member_role = self.get_channel(465158208978157588).guild.get_role(663581221967757313)
         await member.add_roles(new_member_role)
 
-    async def my_background_task(self):
-        await self.wait_until_ready()
+    # TODO: Generalize prompting
+    async def prompt_keisanchuu(self, t_minus):
+        now = datetime.datetime.now(jptz)
 
         tv_radio_channel = self.get_channel(465158208978157588)
         keisanchuu_role = tv_radio_channel.guild.get_role(641112458291052584)
+
+        await tv_radio_channel.trigger_typing()
+
+        alert_embed = discord.Embed(title="Keisanchu Reminder",
+                                    type='rich',
+                                    description="**Hey guys!** Time now is `{}`, The next episode of 22/7 {} is airing in **{} minutes**.\n"
+                                                "You can watch it at:".format(now.strftime('%Y-%m-%d %H:%M %Z'),
+                                                                              keisanchuu_role.mention, t_minus))
+
+        alert_embed.add_field(name="Link 1", value="https://vk.com/videos-177082369")
+        alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/1977861545719")
+        alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
+
+        alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
+
+        await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
+
+    async def prompt_radio(self, t_minus):
+        now = datetime.datetime.now(jptz)
+
+        tv_radio_channel = self.get_channel(465158208978157588)
         radio_role = tv_radio_channel.guild.get_role(694627966495490078)
 
-        print("now sending timed message to channel {}".format(tv_radio_channel.name))
+        await tv_radio_channel.trigger_typing()
+        alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
+                                    type='rich',
+                                    description="**Hey guys!** Time now is `{}`, This week's {} Plus will start in **{} minutes**. \n\n"
+                                                "If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n"
+                                                "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(
+                                        now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention, t_minus))
+
+        alert_embed.add_field(name='You can watch it at',
+                              value='http://www.uniqueradio.jp/agplayerf/player3.php')
+        alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
+        alert_embed.set_image(url='https://pbs.twimg.com/media/EUcZFgcUUAA43Rp?format=jpg&name=small')
+
+        await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
+
+    async def my_background_task(self):
+        await self.wait_until_ready()
+
+        schedule.every().saturday.at("22:30").do(self.prompt_keisanchuu, 30)
+        schedule.every().saturday.at("22:55").do(self.prompt_keisanchuu, 5)
+        schedule.every().saturday.at("15:30").do(self.prompt_radio, 30)
+        schedule.every().saturday.at("15:55").do(self.prompt_radio, 5)
+
         print("Background Task engaged.")
 
         while not self.is_closed():
-            now = datetime.datetime.now(jptz)
-
-            # Keisanchuu 30 min alert
-            if now.weekday() == 5 and now.hour == 22 and now.minute == 30 and now.second == 0:
-                await tv_radio_channel.trigger_typing()
-
-                alert_embed = discord.Embed(title="Keisanchu Reminder",
-                                            type='rich',
-                                            description="**Hey guys!** Time now is `{}`, The next episode of 22/7 {} is airing in **30 minutes**.\n"
-                                                        "You can watch it at:".format(now.strftime('%Y-%m-%d %H:%M %Z'), keisanchuu_role.mention))
-
-                alert_embed.add_field(name="Link 1", value="https://vk.com/videos-177082369")
-                alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/1977861545719")
-                alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
-
-                alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
-
-                await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
-            else:
-                await asyncio.sleep(0.2)
-
-            # Keisanchuu 5 min alert
-            if now.weekday() == 5 and now.hour == 22 and now.minute == 55 and now.second == 0:
-                await tv_radio_channel.trigger_typing()
-
-                alert_embed = discord.Embed(title="Keisanchu Reminder",
-                                            type='rich',
-                                            description="**Hey guys!** Time now is `{}`, The next episode of 22/7 {} is airing in **5 minutes**.\n"
-                                                        "You can watch it at:".format(now.strftime('%Y-%m-%d %H:%M %Z'), keisanchuu_role.mention))
-
-                alert_embed.add_field(name="Link 1", value="https://vk.com/videos-177082369")
-                alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/1977861545719")
-                alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
-
-                alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
-
-                await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
-            else:
-                await asyncio.sleep(0.2)
-
-            # Radio 30 min alert
-            if now.weekday() == 5 and now.hour == 15 and now.minute == 30 and now.second == 0:
-                await tv_radio_channel.trigger_typing()
-                alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
-                                            type='rich',
-                                            description="**Hey guys!** Time now is `{}`, This week's {} Plus will start in **30 minutes**. \n\n"
-                                                        "If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n"
-                                                        "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(
-                                                now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention))
-
-                alert_embed.add_field(name='You can watch it at',
-                                      value='http://www.uniqueradio.jp/agplayerf/player3.php')
-                alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
-                alert_embed.set_image(url='https://pbs.twimg.com/media/EUcZFgcUUAA43Rp?format=jpg&name=small')
-
-                await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
-            else:
-                await asyncio.sleep(0.2)
-
-            # Radio 5 min alert
-            if now.weekday() == 5 and now.hour == 15 and now.minute == 55 and now.second == 0:
-                await tv_radio_channel.trigger_typing()
-
-                alert_embed = discord.Embed(title='Warikirenai Plus Radio Reminder',
-                                            type='rich',
-                                            description="**Hey guys!** Time now is `{}`, This week's {} Plus will start in **5 minutes**. \n\n"
-                                                        "If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n"
-                                                        "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(
-                                                now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention))
-
-                alert_embed.add_field(name='You can watch it at',
-                                      value='http://www.uniqueradio.jp/agplayerf/player3.php')
-                alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=self.user.avatar_url)
-                alert_embed.set_image(url='https://pbs.twimg.com/media/EUcZFgcUUAA43Rp?format=jpg&name=small')
-
-                await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
-            else:
-                await asyncio.sleep(0.2)
+            schedule.run_pending()
+            await asyncio.sleep(1)
 
 
 client = MyClient()

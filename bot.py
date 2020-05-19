@@ -11,7 +11,7 @@ from Modules.Wariraji import Wariraji
 from Modules.MyHelp import MyHelp
 
 bot_description = '''
-R.E.I.N.A. 1.23
+R.E.I.N.A. 1.24
 
 Roles and Entertainment Information and Notification Agent
 
