@@ -9,17 +9,17 @@ from Modules.Mods import Mods
 from Modules.Roles import Roles
 from Modules.Wariraji import Wariraji
 from Modules.MyHelp import MyHelp
+from Modules.Checks import check_if_bot_spam
 
-bot_description = '''
-R.E.I.N.A. 1.24
+BOT_DESCRIPTION = '''
+R.E.I.N.A. 1.25
 
 Roles and Entertainment Information and Notification Agent
 
-Open source at: https://github.com/Skk-nsmt/REINA
 Licensed under WTFPL
 '''
 
-bot = commands.Bot(command_prefix='>', description=bot_description, case_insensitive=True, help_command=MyHelp())
+bot = commands.Bot(command_prefix='>', description=BOT_DESCRIPTION, case_insensitive=True, help_command=MyHelp())
 
 
 @bot.listen()
@@ -36,20 +36,21 @@ async def on_message(message):
     # don't respond to ourselves
     if message.author == bot.user:
         return
-    if "reina" in message.content.lower():
+    if "reina" in message.content.lower().split():
         text = TextBlob(message.content.lower())
-        if text.polarity >= 0.2:
+        if text.polarity >= 0.3:
             await message.add_reaction('♥️')
-        if text.polarity <= -0.2:
+        if text.polarity <= -0.3:
             await message.add_reaction('💔')
 
 
 class Special(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, cog_bot):
+        self.bot = cog_bot
         self._last_member = None
 
     @commands.command()
+    @check_if_bot_spam()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     async def protect(self, ctx):
         """
@@ -59,11 +60,11 @@ class Special(commands.Cog):
         global new_member_loaded
 
         if new_member_loaded:
-            bot.unload_extension("authentication")
+            bot.unload_extension("Modules.Authentication")
             new_member_loaded = False
             await ctx.send("Unloaded. ")
         else:
-            bot.load_extension("authentication")
+            bot.load_extension("Modules.Authentication")
             new_member_loaded = True
             await ctx.send("Loaded. ")
 

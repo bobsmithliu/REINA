@@ -30,15 +30,8 @@ class Default(commands.Cog):
 
         await ctx.send("*{}* \nーー *「{}」*".format(random_lyrics, random_song))
 
-    @commands.command(aliases=['227gugs', 'cakjhvckjsdhvckjh'])
-    @check_if_tv_or_streams_or_bot_spam()
-    async def twitch227(self, ctx):
-        """
-        Direct to 227gugs twitch channel.
-        """
-        await ctx.send("https://www.twitch.tv/227gugs")
-
     @hi.error
+    @rand_lyrics.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):

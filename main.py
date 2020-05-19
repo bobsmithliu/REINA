@@ -1,12 +1,11 @@
-import discord
-import datetime
 import asyncio
+import datetime
+
+import discord
 import pytz
 import schedule
 
 import TOKEN
-
-jptz = pytz.timezone('Asia/Tokyo')
 
 
 class MyClient(discord.Client):
@@ -16,16 +15,9 @@ class MyClient(discord.Client):
         # create the background task and run it in the background
         self.bg_task = self.loop.create_task(self.my_background_task())
 
-    async def on_ready(self):
-        print('Logged on as', self.user)
-
-    async def on_member_join(self, member):
-        new_member_role = self.get_channel(465158208978157588).guild.get_role(663581221967757313)
-        await member.add_roles(new_member_role)
-
     # TODO: Generalize prompting
     async def prompt_keisanchuu(self, t_minus):
-        now = datetime.datetime.now(jptz)
+        now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
         tv_radio_channel = self.get_channel(465158208978157588)
         keisanchuu_role = tv_radio_channel.guild.get_role(641112458291052584)
@@ -47,7 +39,7 @@ class MyClient(discord.Client):
         await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
 
     async def prompt_radio(self, t_minus):
-        now = datetime.datetime.now(jptz)
+        now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
         tv_radio_channel = self.get_channel(465158208978157588)
         radio_role = tv_radio_channel.guild.get_role(694627966495490078)
@@ -80,6 +72,13 @@ class MyClient(discord.Client):
         while not self.is_closed():
             schedule.run_pending()
             await asyncio.sleep(1)
+
+    async def on_ready(self):
+        print('Logged on as', self.user)
+
+    async def on_member_join(self, member):
+        new_member_role = self.get_channel(465158208978157588).guild.get_role(663581221967757313)
+        await member.add_roles(new_member_role)
 
 
 client = MyClient()

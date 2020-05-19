@@ -1,11 +1,11 @@
 import asyncio
 import datetime
+import time
 
 import aiohttp
 import bs4
 import discord
 import pytz
-import time
 from discord.ext import commands
 
 from Modules import CONSTANT
@@ -83,7 +83,8 @@ class Mods(commands.Cog):
                                                    color=CONSTANT.showroom_stream_links[person][2])
 
                 for tz in timezones:
-                    announcement_embed.add_field(name=tz[0], value=stream_time.astimezone(tz[1]).strftime(time_format_string))
+                    announcement_embed.add_field(name=tz[0],
+                                                 value=stream_time.astimezone(tz[1]).strftime(time_format_string))
 
                 announcement_embed.set_author(name='Upcoming Showroom Stream',
                                               icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
