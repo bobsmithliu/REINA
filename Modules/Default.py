@@ -3,7 +3,7 @@ import random
 import asyncio
 
 from Modules import CONSTANT
-from Modules.Checks import check_if_bot_spam, check_if_tv_or_streams_or_bot_spam
+from Modules.Checks import check_if_bot_spam
 
 
 class Default(commands.Cog):
@@ -25,8 +25,8 @@ class Default(commands.Cog):
         """
         Print out random lyrics from 22/7 songs.
         """
-        random_song = random.choice(list(CONSTANT.lyrics.keys()))
-        random_lyrics = "\n> ".join(("> " + random.choice(CONSTANT.lyrics[random_song])).split("\n"))
+        random_song = random.choice(list(CONSTANT.LYRICS.keys()))
+        random_lyrics = "\n> ".join(("> " + random.choice(CONSTANT.LYRICS[random_song])).split("\n"))
 
         await ctx.send("*{}* \nーー *「{}」*".format(random_lyrics, random_song))
 

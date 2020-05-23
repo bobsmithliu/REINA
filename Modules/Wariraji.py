@@ -19,11 +19,14 @@ class Wariraji(commands.Cog):
         """
         radio_role = ctx.guild.get_role(694627966495490078)
         if radio_role in ctx.author.roles:
-            await ctx.send("You already have that role!")
+            message = await ctx.send("You already have that role!")
         else:
             await ctx.author.add_roles(radio_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have subscribed to Warikirenai Radio Plus notifications.")
+            message = await ctx.send("You have subscribed to Warikirenai Radio Plus notifications.")
+
+        await message.delete()
+        await ctx.message.delete()
 
     @commands.command()
     @check_if_bot_spam()
@@ -33,11 +36,14 @@ class Wariraji(commands.Cog):
         """
         radio_role = ctx.guild.get_role(694627966495490078)
         if radio_role not in ctx.author.roles:
-            await ctx.send("You don't have that role!")
+            message = await ctx.send("You don't have that role!")
         else:
             await ctx.author.remove_roles(radio_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have unsubscribed to Warikirenai Radio Plus notifications.")
+            message = await ctx.send("You have unsubscribed to Warikirenai Radio Plus notifications.")
+
+        await message.delete()
+        await ctx.message.delete()
 
     @sub_wariraji.error
     @unsub_wariraji.error

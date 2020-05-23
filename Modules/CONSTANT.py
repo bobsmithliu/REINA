@@ -1,6 +1,6 @@
 import discord
 
-sub_roles_id = {
+SUB_ROLES_ID = {
     'Tamago': 497370840824807424,
     'Tsubomi': 497369993428729856,
     'Ainacchi': 466163376779689985,
@@ -30,7 +30,7 @@ sub_roles_id = {
     'Nana': 691153793626144779,
     'Miko': 691154105208537168
 }
-main_roles_id = {
+MAIN_ROLES_ID = {
     'Tamago': 497370864254320670,
     'Tsubomi': 497370023397163008,
     'Ainacchi': 466160683185340426,
@@ -61,9 +61,9 @@ main_roles_id = {
     'Miko': 691154027534221323
 }
 
-acceptable_roles = main_roles_id.keys()
+ROLEABLES = MAIN_ROLES_ID.keys()
 
-showroom_stream_links = {
+SHOWROOM_STREAM_LINKS = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],
     'Mei': ['Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()],
@@ -79,7 +79,7 @@ showroom_stream_links = {
     'Nananiji': ['Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue()]
 }
 
-instagram_stream_links = {
+INSTAGRAM_STREAM_LINKS = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.instagram.com/c_rurun410/live', discord.Color.red()],
     'Reina': ['Miyase Reina', 'https://www.instagram.com/reinyan_0526/live', discord.Color.dark_magenta()],
     'Sally': ['Amaki Sally', 'https://www.instagram.com/sallyamaki/live', discord.Color.gold()],
@@ -89,7 +89,7 @@ instagram_stream_links = {
     'Moe': ['Suzuhana Moe', 'https://www.instagram.com/moepiyo227/live', discord.Color.magenta()],
 }
 
-lyrics = {
+LYRICS = {
     "僕は存在していなかった":
         ["僕は自分を信じていない　\n自分の存在　知られたくなかった",
          "風が吹く日は　その風が止むまで　\n部屋から出るなんて考えたこともない　\n心の窓にはカーテンを引いて　\n世界の隅でそっと息をしてた",

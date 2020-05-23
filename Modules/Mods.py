@@ -11,20 +11,20 @@ from discord.ext import commands
 from Modules import CONSTANT
 from Modules.Checks import check_if_bot_spam
 
-jptz = pytz.timezone('Asia/Tokyo')
-universaltz = pytz.timezone('UTC')
-pacifictz = pytz.timezone('America/Los_Angeles')
-centraltz = pytz.timezone('America/Chicago')
-easterntz = pytz.timezone('America/New_York')
+JP_TZ = pytz.timezone('Asia/Tokyo')
+UNIVERSAL_TZ = pytz.timezone('UTC')
+PACIFIC_TZ = pytz.timezone('America/Los_Angeles')
+CENTRAL_TZ = pytz.timezone('America/Chicago')
+EASTERN_TZ = pytz.timezone('America/New_York')
 
-timezones = [
-    ("Japan Time", jptz),
-    ("Universal Time", universaltz),
-    ("Pacific Time", pacifictz),
-    ("Central Time", centraltz),
-    ("Eastern Time", easterntz)]
+TIMEZONES = [
+    ("Japan Time", JP_TZ),
+    ("Universal Time", UNIVERSAL_TZ),
+    ("Pacific Time", PACIFIC_TZ),
+    ("Central Time", CENTRAL_TZ),
+    ("Eastern Time", EASTERN_TZ)]
 
-time_format_string = "%Y-%m-%d %I:%M%p"
+TIME_FORMAT_STRING = "%Y-%m-%d %I:%M%p"
 
 
 class Mods(commands.Cog):
@@ -52,13 +52,13 @@ class Mods(commands.Cog):
             'Referer': "https://www.showroom-live.com"
         }
 
-        if person in CONSTANT.showroom_stream_links:
+        if person in CONSTANT.SHOWROOM_STREAM_LINKS:
             await stream_channel.trigger_typing()
-            now = datetime.datetime.now(jptz)
+            now = datetime.datetime.now(JP_TZ)
 
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(CONSTANT.showroom_stream_links[person][1], headers=headers) as r:
+                    async with session.get(CONSTANT.SHOWROOM_STREAM_LINKS[person][1], headers=headers) as r:
                         if r.status == 200:
                             page = bs4.BeautifulSoup(await r.text(), "html.parser")
 
@@ -68,23 +68,23 @@ class Mods(commands.Cog):
                     await ctx.send("Time cannot be parsed. ")
                     return
 
-                stream_time = jptz.localize(datetime.datetime(year=now.year,
-                                                              month=now.month,
-                                                              day=now.day,
-                                                              hour=parsed_time.tm_hour,
-                                                              minute=parsed_time.tm_min))
+                stream_time = JP_TZ.localize(datetime.datetime(year=now.year,
+                                                               month=now.month,
+                                                               day=now.day,
+                                                               hour=parsed_time.tm_hour,
+                                                               minute=parsed_time.tm_min))
 
                 if date == "tomorrow":
                     stream_time = stream_time + datetime.timedelta(days=1)
 
-                announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.showroom_stream_links[person][0]),
+                announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.SHOWROOM_STREAM_LINKS[person][0]),
                                                    type='rich',
-                                                   description='{}'.format(CONSTANT.showroom_stream_links[person][1]),
-                                                   color=CONSTANT.showroom_stream_links[person][2])
+                                                   description='{}'.format(CONSTANT.SHOWROOM_STREAM_LINKS[person][1]),
+                                                   color=CONSTANT.SHOWROOM_STREAM_LINKS[person][2])
 
-                for tz in timezones:
+                for tz in TIMEZONES:
                     announcement_embed.add_field(name=tz[0],
-                                                 value=stream_time.astimezone(tz[1]).strftime(time_format_string))
+                                                 value=stream_time.astimezone(tz[1]).strftime(TIME_FORMAT_STRING))
 
                 announcement_embed.set_author(name='Upcoming Showroom Stream',
                                               icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
@@ -117,9 +117,9 @@ class Mods(commands.Cog):
         """
         stream_channel = ctx.guild.get_channel(336281736633909258)
 
-        if person in CONSTANT.instagram_stream_links:
+        if person in CONSTANT.INSTAGRAM_STREAM_LINKS:
             await stream_channel.trigger_typing()
-            now = datetime.datetime.now(jptz)
+            now = datetime.datetime.now(JP_TZ)
 
             try:
                 parsed_time = time.strptime(planned_time, "%H:%M")
@@ -127,23 +127,23 @@ class Mods(commands.Cog):
                 await ctx.send("Time cannot be parsed. ")
                 return
 
-            stream_time = jptz.localize(datetime.datetime(year=now.year,
-                                                          month=now.month,
-                                                          day=now.day,
-                                                          hour=parsed_time.tm_hour,
-                                                          minute=parsed_time.tm_min))
+            stream_time = JP_TZ.localize(datetime.datetime(year=now.year,
+                                                           month=now.month,
+                                                           day=now.day,
+                                                           hour=parsed_time.tm_hour,
+                                                           minute=parsed_time.tm_min))
 
             if date == "tomorrow":
                 stream_time = stream_time + datetime.timedelta(days=1)
 
-            announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.instagram_stream_links[person][0]),
+            announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.INSTAGRAM_STREAM_LINKS[person][0]),
                                                type='rich',
-                                               description='{}'.format(CONSTANT.instagram_stream_links[person][1]),
-                                               color=CONSTANT.instagram_stream_links[person][2])
+                                               description='{}'.format(CONSTANT.INSTAGRAM_STREAM_LINKS[person][1]),
+                                               color=CONSTANT.INSTAGRAM_STREAM_LINKS[person][2])
 
-            for tz in timezones:
+            for tz in TIMEZONES:
                 announcement_embed.add_field(name=tz[0],
-                                             value=stream_time.astimezone(tz[1]).strftime(time_format_string))
+                                             value=stream_time.astimezone(tz[1]).strftime(TIME_FORMAT_STRING))
 
             announcement_embed.set_author(name='Upcoming Instagram Stream',
                                           icon_url="https://instagram.com/static/images/ico/apple-touch-icon-180x180-precomposed.png/c06fdb2357bd.png")

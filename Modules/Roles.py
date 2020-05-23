@@ -28,34 +28,39 @@ class Roles(commands.Cog):
         """
         role_name = role_name.capitalize()
 
-        if role_name in CONSTANT.acceptable_roles:
+        if role_name in CONSTANT.ROLEABLES:
             if role_type == 'main':
                 role_ids = [role.id for role in ctx.author.roles]
-                main_roles = list(set(role_ids) & set(CONSTANT.main_roles_id.values()))
+                main_roles = list(set(role_ids) & set(CONSTANT.MAIN_ROLES_ID.values()))
 
-                role = ctx.guild.get_role(CONSTANT.main_roles_id[role_name])
+                role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
 
                 if role in ctx.author.roles:
                     await ctx.send("You already have that role!")
+                    await ctx.message.delete()
                 elif main_roles:
                     await ctx.send("You can't have more than one main role!")
+                    await ctx.message.delete()
                 else:
                     await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                         datetime.datetime.utcnow()))
                     await ctx.send("Role added.")
             elif role_type == 'sub':
-                role = ctx.guild.get_role(CONSTANT.sub_roles_id[role_name])
+                role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
 
                 if role in ctx.author.roles:
                     await ctx.send("You already have that role!")
+                    await ctx.message.delete()
                 else:
                     await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                         datetime.datetime.utcnow()))
                     await ctx.send("Role added.")
             else:
                 await ctx.send("Illegal operation.")
+                await ctx.message.delete()
         else:
             await ctx.send("Illegal role name. Type `>help role` for a list of acceptable role names. ")
+            await ctx.message.delete()
 
     @commands.command()
     @check_if_role_or_bot_spam()
@@ -73,17 +78,19 @@ class Roles(commands.Cog):
         """
         role_name = role_name.capitalize()
 
-        if role_name in CONSTANT.acceptable_roles:
+        if role_name in CONSTANT.ROLEABLES:
             if role_type == 'main':
-                role = ctx.guild.get_role(CONSTANT.main_roles_id[role_name])
+                role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
             elif role_type == 'sub':
-                role = ctx.guild.get_role(CONSTANT.sub_roles_id[role_name])
+                role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
             else:
                 await ctx.send("Illegal operation.")
+                await ctx.message.delete()
                 return
 
             if role not in ctx.author.roles:
                 await ctx.send("You don't have that role!")
+                await ctx.message.delete()
             else:
                 await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                     datetime.datetime.utcnow()))
@@ -91,6 +98,7 @@ class Roles(commands.Cog):
 
         else:
             await ctx.send("Illegal role name.")
+            await ctx.message.delete()
 
     @role.error
     @unrole.error

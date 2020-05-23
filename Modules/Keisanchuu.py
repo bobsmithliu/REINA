@@ -19,11 +19,14 @@ class Keisanchuu(commands.Cog):
         """
         keisanchuu_role = ctx.guild.get_role(641112458291052584)
         if keisanchuu_role in ctx.author.roles:
-            await ctx.send("You already have that role!")
+            message = await ctx.send("You already have that role!")
         else:
             await ctx.author.add_roles(keisanchuu_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have subscribed to 22/7 Keisanchuu notifications.")
+            message = await ctx.send("You have subscribed to 22/7 Keisanchuu notifications.")
+
+        await message.delete()
+        await ctx.message.delete()
 
     @commands.command()
     @check_if_bot_spam()
@@ -33,11 +36,14 @@ class Keisanchuu(commands.Cog):
         """
         keisanchuu_role = ctx.guild.get_role(641112458291052584)
         if keisanchuu_role not in ctx.author.roles:
-            await ctx.send("You don't have that role!")
+            message = await ctx.send("You don't have that role!")
         else:
             await ctx.author.remove_roles(keisanchuu_role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                 datetime.datetime.utcnow()))
-            await ctx.send("You have unsubscribed to 22/7 Keisanchuu notifications.")
+            message = await ctx.send("You have unsubscribed to 22/7 Keisanchuu notifications.")
+
+        await message.delete()
+        await ctx.message.delete()
 
     @sub_keisanchuu.error
     @unsub_keisanchuu.error
