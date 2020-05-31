@@ -63,6 +63,8 @@ MAIN_ROLES_ID = {
 
 ROLEABLES = MAIN_ROLES_ID.keys()
 
+SUBSCRIBEABLES = [694627966495490078, 641112458291052584]
+
 SHOWROOM_STREAM_LINKS = {
     'Chiharu': ['Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()],
     'Ruri': ['Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()],

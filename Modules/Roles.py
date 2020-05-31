@@ -36,31 +36,31 @@ class Roles(commands.Cog):
                 role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
 
                 if role in ctx.author.roles:
-                    await ctx.send("You already have that role!")
-                    await ctx.message.delete()
+                    response = await ctx.send("You already have that role!")
                 elif main_roles:
-                    await ctx.send("You can't have more than one main role!")
-                    await ctx.message.delete()
+                    response = await ctx.send("You can't have more than one main role!")
                 else:
                     await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                         datetime.datetime.utcnow()))
-                    await ctx.send("Role added.")
+                    response = await ctx.send("Role added.")
             elif role_type == 'sub':
                 role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
 
                 if role in ctx.author.roles:
-                    await ctx.send("You already have that role!")
-                    await ctx.message.delete()
+                    response = await ctx.send("You already have that role!")
                 else:
                     await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
                         datetime.datetime.utcnow()))
-                    await ctx.send("Role added.")
+                    response = await ctx.send("Role added.")
             else:
-                await ctx.send("Illegal operation.")
-                await ctx.message.delete()
+                response = await ctx.send("Illegal operation.")
         else:
-            await ctx.send("Illegal role name. Type `>help role` for a list of acceptable role names. ")
-            await ctx.message.delete()
+            response = await ctx.send("Illegal role name. Type `>help role` for a list of acceptable role names. ")
+
+        await asyncio.sleep(5)
+
+        await ctx.message.delete()
+        await response.delete()
 
     @commands.command()
     @check_if_role_or_bot_spam()

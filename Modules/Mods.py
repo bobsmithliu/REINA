@@ -41,9 +41,11 @@ class Mods(commands.Cog):
 
         Make Showroom stream announcements at #227-streams.
 
-        person: use members' first name, or use "Nananiji" for Nananiji Room stream on Showroom.
+        person: use member's first name, or use "Nananiji" for Nananiji Room stream on Showroom.
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
         planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+
+        Valid first names are: Chiharu, Ruri, Mei, Uta, Reina, Sally, Aina, Kanae, Urara, Moe, Mizuha, Nagomi
         """
         stream_channel = ctx.guild.get_channel(336281736633909258)
 
@@ -114,6 +116,8 @@ class Mods(commands.Cog):
         person: use members' first name.
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
         planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+
+        Valid first names are: Chiharu, Reina, Sally, Aina, Kanae, Urara, Moe
         """
         stream_channel = ctx.guild.get_channel(336281736633909258)
 
