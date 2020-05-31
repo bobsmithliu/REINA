@@ -70,7 +70,6 @@ async def on_member_join(member):
 @bot.listen()
 async def on_reaction_add(reaction, user):
     if reaction.message.id in REACTIONABLES and user.id != bot.user.id:
-        print("called")
         bot_msg = await reaction.message.channel.fetch_message(reaction.message.id)
         # is the user reacted the user sent the message
         if REACTIONABLES[reaction.message.id]["user"] == user.id and reaction.emoji in REACTION_EMOJIS:
@@ -86,10 +85,9 @@ async def on_reaction_add(reaction, user):
                     await user.remove_roles(role, reason="R.E.I.N.A. action. Executed {}".format(datetime.datetime.utcnow()))
                     await bot_msg.edit(content="Unsubscribed", embed=None)
                 await bot_msg.clear_reactions()
-
-        await asyncio.sleep(5)
-        await bot_msg.delete()
-        del REACTIONABLES[reaction.message.id]
+                await asyncio.sleep(5)
+                await bot_msg.delete()
+                del REACTIONABLES[reaction.message.id]
 
 
 async def prompt_keisanchuu(bot_b, t_minus):
@@ -213,6 +211,7 @@ class Subscribe(commands.Cog):
 
         await asyncio.sleep(3)
         await ctx.message.delete()
+        await asyncio.sleep(60)
         if sub_msg.id in REACTIONABLES:
             await sub_msg.delete()
             del REACTIONABLES[sub_msg.id]
