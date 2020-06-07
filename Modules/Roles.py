@@ -25,6 +25,8 @@ class Roles(commands.Cog):
 
         Only the following roles may be added:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko
+
+        Note: >role/unrole main <role_name> has been deprecated, use >main_role for a smarter configurator.
         """
         role_name = role_name.capitalize()
 
@@ -36,31 +38,24 @@ class Roles(commands.Cog):
                 role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
 
                 if role in ctx.author.roles:
-                    response = await ctx.send("You already have that role!")
+                    await ctx.send("You already have that role!")
                 elif main_roles:
-                    response = await ctx.send("You can't have more than one main role!")
+                    await ctx.send("You can't have more than one main role!")
                 else:
-                    await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
-                        datetime.datetime.utcnow()))
-                    response = await ctx.send("Role added.")
+                    await ctx.author.add_roles(role)
+                    await ctx.send("Role added.")
             elif role_type == 'sub':
                 role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
 
                 if role in ctx.author.roles:
-                    response = await ctx.send("You already have that role!")
+                    await ctx.send("You already have that role!")
                 else:
-                    await ctx.author.add_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
-                        datetime.datetime.utcnow()))
-                    response = await ctx.send("Role added.")
+                    await ctx.author.add_roles(role)
+                    await ctx.send("Role added.")
             else:
-                response = await ctx.send("Illegal operation.")
+                await ctx.send("Illegal operation.")
         else:
-            response = await ctx.send("Illegal role name. Type `>help role` for a list of acceptable role names. ")
-
-        await asyncio.sleep(5)
-
-        await ctx.message.delete()
-        await response.delete()
+            await ctx.send("Illegal role name. Type `>help role` for a list of acceptable role names. ")
 
     @commands.command()
     @check_if_role_or_bot_spam()
@@ -75,6 +70,8 @@ class Roles(commands.Cog):
 
         Only the following roles may be deleted:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko
+
+        Note: >role/unrole main <role_name> has been deprecated, use >main_role for a smarter configurator.
         """
         role_name = role_name.capitalize()
 
@@ -85,20 +82,16 @@ class Roles(commands.Cog):
                 role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
             else:
                 await ctx.send("Illegal operation.")
-                await ctx.message.delete()
                 return
 
             if role not in ctx.author.roles:
                 await ctx.send("You don't have that role!")
-                await ctx.message.delete()
             else:
-                await ctx.author.remove_roles(role, reason="R.E.I.N.A. bot action. Executed at {} UTC".format(
-                    datetime.datetime.utcnow()))
+                await ctx.author.remove_roles(role)
                 await ctx.send("Role removed.")
 
         else:
-            await ctx.send("Illegal role name.")
-            await ctx.message.delete()
+            await ctx.send("Illegal role name. Type `>help unrole` for a list of acceptable role names. ")
 
     @role.error
     @unrole.error

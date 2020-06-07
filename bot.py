@@ -12,11 +12,11 @@ from Modules.Default import Default
 from Modules.Mods import Mods
 from Modules.Roles import Roles
 from Modules.MyHelp import MyHelp
-from Modules.Checks import check_if_bot_spam
+from Modules.Checks import check_if_bot_spam, check_if_role_or_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.00
+R.E.I.N.A. 2.01
 
 Roles and Entertainment Information and Notification Agent
 
@@ -26,7 +26,8 @@ Licensed under WTFPL
 bot = commands.Bot(command_prefix='>', description=BOT_DESCRIPTION, case_insensitive=True, help_command=MyHelp())
 scheduler = AsyncIOScheduler()
 REACTIONABLES = {}
-REACTION_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣"]
+COUNTER_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🇦", "🇧", "🇨", "🇩", "🇪",
+                  "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴", "🇵", "🇶", "🇷", "🇸", "🇹"]
 
 
 @bot.listen()
@@ -71,23 +72,24 @@ async def on_member_join(member):
 async def on_reaction_add(reaction, user):
     if reaction.message.id in REACTIONABLES and user.id != bot.user.id:
         bot_msg = await reaction.message.channel.fetch_message(reaction.message.id)
-        # is the user reacted the user sent the message
-        if REACTIONABLES[reaction.message.id]["user"] == user.id and reaction.emoji in REACTION_EMOJIS:
-            reaction_index = REACTION_EMOJIS.index(reaction.emoji)
 
-            if reaction_index < len(REACTIONABLES[reaction.message.id]["operatables"]):
-                role = reaction.message.guild.get_role(REACTIONABLES[reaction.message.id]["operatables"][reaction_index])
+        if REACTIONABLES[reaction.message.id]["user"] == user.id:  # is the user reacted the user sent the message
+            if REACTIONABLES[reaction.message.id]["category"] == "subscription" and reaction.emoji in COUNTER_EMOJIS:
+                reaction_index = COUNTER_EMOJIS.index(reaction.emoji)
 
-                if REACTIONABLES[reaction.message.id]["type"] == "sub":
-                    await user.add_roles(role, reason="R.E.I.N.A. action. Executed {}".format(datetime.datetime.utcnow()))
-                    await bot_msg.edit(content="Subscription added", embed=None)
-                elif REACTIONABLES[reaction.message.id]["type"] == "unsub":
-                    await user.remove_roles(role, reason="R.E.I.N.A. action. Executed {}".format(datetime.datetime.utcnow()))
-                    await bot_msg.edit(content="Unsubscribed", embed=None)
-                await bot_msg.clear_reactions()
-                await asyncio.sleep(5)
-                await bot_msg.delete()
-                del REACTIONABLES[reaction.message.id]
+                if reaction_index < len(REACTIONABLES[reaction.message.id]["operatables"]):  # verify reaction
+                    role = reaction.message.guild.get_role(REACTIONABLES[reaction.message.id]["operatables"][reaction_index])
+
+                    if REACTIONABLES[reaction.message.id]["type"] == "add":
+                        await user.add_roles(role)
+                    elif REACTIONABLES[reaction.message.id]["type"] == "remove":
+                        await user.remove_roles(role)
+                    await bot_msg.edit(content="Subscription configured. ", embed=None)
+
+            await bot_msg.clear_reactions()
+            await asyncio.sleep(5)
+            await bot_msg.delete()
+            del REACTIONABLES[reaction.message.id]
 
 
 async def prompt_keisanchuu(bot_b, t_minus):
@@ -187,8 +189,8 @@ class Subscribe(commands.Cog):
             return
 
         description_str = ""
-        for index, role in enumerate(user_subscribeable):
-            description_str += "{}. {}\n".format(index + 1, role.name)
+        for emoji, role in zip(COUNTER_EMOJIS, user_subscribeable):
+            description_str += "{} {}\n".format(emoji, role.name)
 
         # make embed
         sub_embed = discord.Embed(title="Choose a reaction to subscribe",
@@ -200,11 +202,12 @@ class Subscribe(commands.Cog):
         sub_msg = await ctx.send(embed=sub_embed)
 
         # add reactions
-        for _, emoji in zip(user_subscribeable, REACTION_EMOJIS):
+        for _, emoji in zip(user_subscribeable, COUNTER_EMOJIS):
             await sub_msg.add_reaction(emoji)
 
         REACTIONABLES[sub_msg.id] = {
-            "type": "sub",
+            "category": "subscription",
+            "type": "add",
             "user": ctx.author.id,
             "operatables": [role.id for role in user_subscribeable]
         }
@@ -248,11 +251,12 @@ class Subscribe(commands.Cog):
         sub_msg = await ctx.send(embed=sub_embed)
 
         # add reactions
-        for _, emoji in zip(user_subscribed, REACTION_EMOJIS):
+        for _, emoji in zip(user_subscribed, COUNTER_EMOJIS):
             await sub_msg.add_reaction(emoji)
 
         REACTIONABLES[sub_msg.id] = {
-            "type": "unsub",
+            "category": "subscription",
+            "type": "remove",
             "user": ctx.author.id,
             "operatables": [role.id for role in user_subscribed]
         }
