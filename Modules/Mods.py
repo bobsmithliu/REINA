@@ -96,8 +96,9 @@ class Mods(commands.Cog):
                                               icon_url=ctx.author.avatar_url)
 
                 stream_msg = await stream_channel.send(embed=announcement_embed)
-
                 await stream_msg.pin()
+                await ctx.send("Success. ")
+
             except ValueError:
                 await ctx.send("HTTP request to Showroom website failed. ")
 
@@ -156,8 +157,8 @@ class Mods(commands.Cog):
                                           icon_url=ctx.author.avatar_url)
 
             stream_msg = await stream_channel.send(embed=announcement_embed)
-
             await stream_msg.pin()
+            await ctx.send("Success. ")
         else:
             await ctx.send("You've put an illegal name or this person does not have an Instagram account yet. ")
 
