@@ -25,8 +25,6 @@ class Roles(commands.Cog):
 
         Only the following roles may be added:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko
-
-        Note: >role/unrole main <role_name> has been deprecated, use >main_role for a smarter configurator.
         """
         role_name = role_name.capitalize()
 
@@ -70,8 +68,6 @@ class Roles(commands.Cog):
 
         Only the following roles may be deleted:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko
-
-        Note: >role/unrole main <role_name> has been deprecated, use >main_role for a smarter configurator.
         """
         role_name = role_name.capitalize()
 
