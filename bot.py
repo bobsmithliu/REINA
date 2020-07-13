@@ -12,11 +12,11 @@ from Modules.Default import Default
 from Modules.Mods import Mods
 from Modules.Roles import Roles
 from Modules.MyHelp import MyHelp
-from Modules.Checks import check_if_bot_spam, check_if_role_or_bot_spam
+from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.02
+R.E.I.N.A. 2.03
 
 Roles and Entertainment Information and Notification Agent
 
@@ -40,8 +40,7 @@ If, in any way, you are not comfortable about how your data is collected and use
 bot = commands.Bot(command_prefix='>', description=BOT_DESCRIPTION, case_insensitive=True, help_command=MyHelp())
 scheduler = AsyncIOScheduler()
 REACTIONABLES = {}
-COUNTER_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🇦", "🇧", "🇨", "🇩", "🇪",
-                  "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴", "🇵", "🇶", "🇷", "🇸", "🇹"]
+COUNTER_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 
 
 @bot.listen()
@@ -52,15 +51,15 @@ async def on_ready():
     print('------')
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(">help"))
 
-    scheduler.add_job(prompt_keisanchuu, "cron", day_of_week='sat', hour=22, minute=30, args=[bot, 30])
-    scheduler.add_job(prompt_keisanchuu, "cron", day_of_week='sat', hour=22, minute=55, args=[bot, 5])
-    scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=30, args=[bot, 30])
-    scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=55, args=[bot, 5])
+    if scheduler.state == 0:
+        scheduler.add_job(prompt_keisanchuu, "cron", day_of_week='sat', hour=22, minute=30, args=[bot, 30])
+        scheduler.add_job(prompt_keisanchuu, "cron", day_of_week='sat', hour=22, minute=55, args=[bot, 5])
+        scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=30, args=[bot, 30])
+        scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=55, args=[bot, 5])
+        print("Background Task Setup finished. ")
 
-    print("Background Task Setup finished. ")
-
-    scheduler.start()
-    print("Scheduler started. ")
+        scheduler.start()
+        print("Scheduler started. ")
 
 
 @bot.listen()
@@ -121,7 +120,7 @@ async def prompt_keisanchuu(bot_b, t_minus):
                                                                           keisanchuu_role.mention, t_minus))
 
     alert_embed.add_field(name="Link 1", value="https://vk.com/videos-177082369")
-    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/1977861545719")
+    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2201018310391")
     alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
@@ -289,6 +288,20 @@ class Subscribe(commands.Cog):
         if sub_msg.id in REACTIONABLES:
             await sub_msg.delete()
             del REACTIONABLES[sub_msg.id]
+
+    @subscribe.error
+    @unsubscribe.error
+    async def command_error(self, ctx, error):
+        bot_channel = ctx.guild.get_channel(336287198510841856)
+        if isinstance(error, commands.CheckFailure):
+            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
+            await asyncio.sleep(1)
+            for i in range(4, 0, -1):
+                await message.edit(
+                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
+                await asyncio.sleep(1)
+            await message.delete()
+            await ctx.message.delete()
 
 
 bot.load_extension("Modules.Authentication")
