@@ -16,7 +16,7 @@ from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.03
+R.E.I.N.A. 2.04
 
 Roles and Entertainment Information and Notification Agent
 
@@ -90,8 +90,8 @@ async def on_reaction_add(reaction, user):
             if REACTIONABLES[reaction.message.id]["category"] == "subscription" and reaction.emoji in COUNTER_EMOJIS:
                 reaction_index = COUNTER_EMOJIS.index(reaction.emoji)
 
-                if reaction_index < len(REACTIONABLES[reaction.message.id]["operatables"]):  # verify reaction
-                    role = reaction.message.guild.get_role(REACTIONABLES[reaction.message.id]["operatables"][reaction_index])
+                if reaction_index < len(REACTIONABLES[reaction.message.id]["operable"]):  # verify reaction
+                    role = reaction.message.guild.get_role(REACTIONABLES[reaction.message.id]["operable"][reaction_index])
 
                     if REACTIONABLES[reaction.message.id]["type"] == "add":
                         await user.add_roles(role)
@@ -139,8 +139,7 @@ async def prompt_radio(bot_b, t_minus):
                                 type='rich',
                                 description="Hey guys! Time now is `{}`, This week's {} Plus will start in **{} minutes**. \n\n"
                                             "If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n"
-                                            "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(
-                                    now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention, t_minus))
+                                            "Fill out the form as best you can and click the bottom button to proceed to the stream.".format(now.strftime('%Y-%m-%d %H:%M %Z'), radio_role.mention, t_minus))
 
     alert_embed.add_field(name='You can watch it at',
                           value='http://www.uniqueradio.jp/agplayerf/player3.php')
@@ -192,17 +191,17 @@ class Subscribe(commands.Cog):
     @check_if_bot_spam()
     async def subscribe(self, ctx):
         """
-        Subscribe to a regular program notification.
+        Subscribe to a regular program's notification.
         """
         user_roles = ctx.author.roles
-        subscribeable_roles = [ctx.guild.get_role(x) for x in CONSTANT.SUBSCRIBEABLES]
+        subscribable_roles = [ctx.guild.get_role(x) for x in CONSTANT.SUBSCRIBABLE]
 
-        user_subscribed = list(set(user_roles) & set(subscribeable_roles))
+        user_subscribed = list(set(user_roles) & set(subscribable_roles))
 
         # get subscribe-able roles
-        user_subscribeable = list(set(subscribeable_roles) - set(user_subscribed))
+        user_subscribable = list(set(subscribable_roles) - set(user_subscribed))
 
-        if len(user_subscribeable) == 0:
+        if len(user_subscribable) == 0:
             bot_msg = await ctx.send("You have no programs to subscribe to. ")
             await asyncio.sleep(3)
             await ctx.message.delete()
@@ -210,7 +209,7 @@ class Subscribe(commands.Cog):
             return
 
         description_str = ""
-        for emoji, role in zip(COUNTER_EMOJIS, user_subscribeable):
+        for emoji, role in zip(COUNTER_EMOJIS, user_subscribable):
             description_str += "{} {}\n".format(emoji, role.name)
 
         # make embed
@@ -223,14 +222,14 @@ class Subscribe(commands.Cog):
         sub_msg = await ctx.send(embed=sub_embed)
 
         # add reactions
-        for _, emoji in zip(user_subscribeable, COUNTER_EMOJIS):
+        for _, emoji in zip(user_subscribable, COUNTER_EMOJIS):
             await sub_msg.add_reaction(emoji)
 
         REACTIONABLES[sub_msg.id] = {
             "category": "subscription",
             "type": "add",
             "user": ctx.author.id,
-            "operatables": [role.id for role in user_subscribeable]
+            "operable": [role.id for role in user_subscribable]
         }
 
         await asyncio.sleep(3)
@@ -247,9 +246,9 @@ class Subscribe(commands.Cog):
         Unsubscribe to a regular program's notification.
         """
         user_roles = ctx.author.roles
-        subscribeable_roles = [ctx.guild.get_role(x) for x in CONSTANT.SUBSCRIBEABLES]
+        subscribable_roles = [ctx.guild.get_role(x) for x in CONSTANT.SUBSCRIBABLE]
 
-        user_subscribed = list(set(user_roles) & set(subscribeable_roles))
+        user_subscribed = list(set(user_roles) & set(subscribable_roles))
 
         if len(user_subscribed) == 0:
             bot_msg = await ctx.send("You have no programs to unsubscribe to. ")
@@ -279,7 +278,7 @@ class Subscribe(commands.Cog):
             "category": "subscription",
             "type": "remove",
             "user": ctx.author.id,
-            "operatables": [role.id for role in user_subscribed]
+            "operable": [role.id for role in user_subscribed]
         }
 
         await asyncio.sleep(3)
