@@ -35,7 +35,7 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce_sr(self, ctx, person, date, planned_time):
+    async def announce_sr(self, ctx, person, date, planned_time, unpin_time=3600):
         """
         (Mod-only command) Make Showroom stream announcements.
 
@@ -43,7 +43,8 @@ class Mods(commands.Cog):
 
         person: use member's first name, or use "Nananiji" for Nananiji Room stream on Showroom.
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
-        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24-hour standard.
+        unpin_time: Unpin the announcement embed after this many seconds, default value is an hour (3600 seconds), must be an integer.
 
         Valid first names are: Chiharu, Ruri, Mei, Uta, Reina, Sally, Aina, Kanae, Urara, Moe, Mizuha, Nagomi
         """
@@ -99,6 +100,12 @@ class Mods(commands.Cog):
                 await stream_msg.pin()
                 await ctx.send("Success. ")
 
+                time_now = datetime.datetime.now(datetime.timezone.utc)
+                seconds_to_unpin = int((stream_time - time_now).total_seconds())
+                await asyncio.sleep(seconds_to_unpin + int(unpin_time))
+                if stream_msg.pinned:
+                    await stream_msg.unpin()
+
             except ValueError:
                 await ctx.send("HTTP request to Showroom website failed. ")
 
@@ -116,7 +123,7 @@ class Mods(commands.Cog):
 
         person: use members' first name.
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
-        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24Hr standard.
+        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24-hour standard.
 
         Valid first names are: Chiharu, Reina, Sally, Aina, Kanae, Urara, Moe
         """
@@ -175,3 +182,5 @@ class Mods(commands.Cog):
                 await asyncio.sleep(1)
             await message.delete()
             await ctx.message.delete()
+        if isinstance(error, commands.MissingAnyRole):
+            await ctx.send("You are not in the list of privileged users, this incident will be reported. (https://xkcd.com/838/)")
