@@ -19,10 +19,17 @@ class Roles(commands.Cog):
         role_type: Use 'main' or 'sub' to indicate which type of role you want. Your main role will control your nametag colour.
         role_names: The name of the roles you want to add, names are not case-sensitive, you can enter as many names as you want to.
 
-        E.g.: ">role main Sally" will add Sally as your main role and make your nametag yellow.
-        E.g.: ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
+        Examples:
 
-        If you enter >role main with more than one role name, you will get the first valid role you entered in the sequence.
+        ">role main Sally" will add Sally as your main role and make your nametag yellow.
+        ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
+
+        If you enter ">role main" with more than one role name, you will get the first valid role you entered in the sequence.
+
+        Examples:
+
+        ">role sub Sally Sakura Ruri Jun" will add all these four roles to you.
+        ">role main Sally Sakura Ruri Jun" will only add Sally as a main role, if you already had Sally as your main role, the operation will be rendered invalid.
 
         Only the following roles may be added:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
@@ -72,9 +79,11 @@ class Roles(commands.Cog):
         Delete a role.
 
         role_type: Use 'main' or 'sub' to indicate which type of role you wish to delete. If you delete your main role, your nametag colour will change to that of your highest sub role until you add a new main role.
-        role_name: The name of the role you want to delete. (Case-insensitive)
+        role_name: The name of the role you want to delete, names are not case-sensitive, you can enter as many names as you want to.
 
         E.g.: ">unrole main Sally" will remove Sally as your main role. If, say, you have Meimei as a sub role, your nametag colour will then be light blue until you add a new main role.
+
+        Multiple role deletion works similarly as >role does, for more help, send ">help role" to #bot spam.
 
         Only the following roles may be deleted:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
@@ -83,7 +92,6 @@ class Roles(commands.Cog):
         result_msgs = []
 
         if role_type != "main" and role_type != "sub":
-            print(role_type)
             await ctx.send("Illegal operation.")
         else:
             for role_name in role_names:

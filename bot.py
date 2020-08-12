@@ -124,8 +124,8 @@ async def prompt_keisanchuu(bot_b, t_minus):
                                             "You can watch it at:".format(now.strftime('%Y-%m-%d %H:%M %Z'),
                                                                           keisanchuu_role.mention, t_minus))
 
-    alert_embed.add_field(name="Link 1", value="https://vk.com/videos-177082369")
-    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2201018310391")
+    alert_embed.add_field(name="Link 1", value="https://www.zhanqi.tv/873082427")
+    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2261404032759")
     alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
@@ -207,7 +207,7 @@ class Subscribe(commands.Cog):
         user_subscribable = list(set(subscribable_roles) - set(user_subscribed))
 
         if len(user_subscribable) == 0:
-            bot_msg = await ctx.send("You have no programs to subscribe to. ")
+            bot_msg = await ctx.send("Since you subscribed to all programs, you have no programs you can subscribe to. ")
             await asyncio.sleep(3)
             await ctx.message.delete()
             await bot_msg.delete()
@@ -256,7 +256,7 @@ class Subscribe(commands.Cog):
         user_subscribed = list(set(user_roles) & set(subscribable_roles))
 
         if len(user_subscribed) == 0:
-            bot_msg = await ctx.send("You have no programs to unsubscribe to. ")
+            bot_msg = await ctx.send("Since you subscribed to no programs, you have no programs to unsubscribe to. ")
             await asyncio.sleep(3)
             await ctx.message.delete()
             await bot_msg.delete()
