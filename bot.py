@@ -12,11 +12,12 @@ from Modules.Default import Default
 from Modules.Mods import Mods
 from Modules.Roles import Roles
 from Modules.MyHelp import MyHelp
+from Modules.Authentication import Authentication
 from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.05
+R.E.I.N.A. 2.06
 
 Roles and Entertainment Information and Notification Agent
 
@@ -25,21 +26,6 @@ Licensed under WTFPL
 Use >help [command] to see the help text of a specific command. 
 
 Use bot only in #bot spam
-'''
-
-PRIVACY = '''
-```
-Privacy Policy
-
-Using this bot (Discord unique user name: R.E.I.N.A. #3681, "this bot") means that you have read and understood this document.
-
-The developer of this bot has made every possible effort to minimize data collection. However, to keep this bot operable responsively, some non-sensitive data will be collected in a non-permanent way. No data is ever stored permanently.
-
-This bot will collect your messages and user information (meta-data included) sent to 22/7 Discord server (http://discord.gg/NxZ3W7Z, "this server") to a server operated by Amazon Web Services in its cache: a non-permanent storage system, for command processing. 
-The bot only collects the most recent 1000 messages sent in this server. Your messages and information will be deleted from the cache after a short period of time. 
-
-If, in any way, you are not comfortable with how your data is collected and used, please immediately contact this bot's developer: Skk#8086. 
-```
 '''
 
 bot = commands.Bot(command_prefix='>', description=BOT_DESCRIPTION, case_insensitive=True, help_command=MyHelp())
@@ -154,39 +140,6 @@ async def prompt_radio(bot_b, t_minus):
     await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
 
 
-class Special(commands.Cog):
-    def __init__(self, cog_bot):
-        self.bot = cog_bot
-        self._last_member = None
-
-    @commands.command()
-    @check_if_bot_spam()
-    async def privacy(self, ctx):
-        """
-        Read this bot's privacy policy.
-        """
-        await ctx.send(PRIVACY)
-
-    @commands.command()
-    @check_if_bot_spam()
-    @commands.has_any_role('Moderators', 'Disciplinary Committee')
-    async def protect(self, ctx):
-        """
-        (Mod-only command) Do mystery things.
-        Note: this is an on-off switch command.
-        """
-        global new_member_loaded
-
-        if new_member_loaded:
-            bot.unload_extension("Modules.Authentication")
-            new_member_loaded = False
-            await ctx.send("Unloaded. ")
-        else:
-            bot.load_extension("Modules.Authentication")
-            new_member_loaded = True
-            await ctx.send("Loaded. ")
-
-
 class Subscribe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -256,7 +209,7 @@ class Subscribe(commands.Cog):
         user_subscribed = list(set(user_roles) & set(subscribable_roles))
 
         if len(user_subscribed) == 0:
-            bot_msg = await ctx.send("Since you subscribed to no programs, you have no programs to unsubscribe to. ")
+            bot_msg = await ctx.send("Since you subscribed to no program, you have no programs to unsubscribe to. ")
             await asyncio.sleep(3)
             await ctx.message.delete()
             await bot_msg.delete()
@@ -271,7 +224,7 @@ class Subscribe(commands.Cog):
                                   colour=discord.Color.red(),
                                   description=description_str)
         sub_embed.set_author(name="You can unsubscribe to the following program(s)")
-        sub_embed.set_footer(text="Note: you must react to the message within 60 seconds. ")
+        sub_embed.set_footer(text="Note: you must react to this message within 60 seconds. ")
 
         sub_msg = await ctx.send(embed=sub_embed)
 
@@ -308,12 +261,9 @@ class Subscribe(commands.Cog):
             await ctx.message.delete()
 
 
-bot.load_extension("Modules.Authentication")
-new_member_loaded = True
-
 bot.add_cog(Default(bot))
 bot.add_cog(Roles(bot))
 bot.add_cog(Mods(bot))
-bot.add_cog(Special(bot))
 bot.add_cog(Subscribe(bot))
+bot.add_cog(Authentication(bot))
 bot.run(TOKEN.TOKEN)
