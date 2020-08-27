@@ -53,6 +53,18 @@ class Default(commands.Cog):
         """
         await ctx.send(PRIVACY)
 
+    @commands.command()
+    @check_if_bot_spam()
+    async def should_i(self, ctx, *prompts):
+        """
+        Let the bot help you to decide what you should do.
+        [prompts...]: a list of things that you want the bot to decide for you, surround each option with a pair of quotation marks.
+
+        Example: >should_i "eat" "sleep"
+        Example: >should_i "AAA" "BBB" "CCC" "DDD"
+        """
+        await ctx.send("You should {}. ".format(random.choice(prompts)))
+
     @hi.error
     @rand_lyrics.error
     async def command_error(self, ctx, error):
