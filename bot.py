@@ -112,6 +112,7 @@ async def prompt_keisanchuu(bot_b, t_minus):
 
     alert_embed.add_field(name="Link 1", value="https://www.zhanqi.tv/873082427")
     alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2261404032759")
+    alert_embed.add_field(name="Link 3", value="https://vk.com/videos-177082369")
     alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
