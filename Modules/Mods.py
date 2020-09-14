@@ -174,13 +174,8 @@ class Mods(commands.Cog):
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
-            await asyncio.sleep(1)
-            for i in range(4, 0, -1):
-                await message.edit(
-                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
-                await asyncio.sleep(1)
-            await message.delete()
-            await ctx.message.delete()
+            await ctx.send('Please proceed your action at {}. '.format(bot_channel.mention))
+        if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.TooManyArguments):
+            await ctx.send('Incorrect number of arguments.')
         if isinstance(error, commands.MissingAnyRole):
             await ctx.send("You are not in the list of privileged users, this incident will be reported. (https://xkcd.com/838/)")

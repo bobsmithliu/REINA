@@ -35,7 +35,15 @@ class Roles(commands.Cog):
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
         """
         role_names = [x.capitalize() for x in role_names]
+
+        if not role_names:
+            await ctx.send("Missing required arguments. ")
+
         result_msgs = []
+
+        if role_type != "main" and role_type != "sub":
+            await ctx.send("Illegal operation.")
+            return
 
         for role_name in role_names:
             if role_name in CONSTANT.ROLEABLES:
@@ -89,6 +97,10 @@ class Roles(commands.Cog):
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
         """
         role_names = [x.capitalize() for x in role_names]
+
+        if not role_names:
+            await ctx.send("Missing required arguments. ")
+
         result_msgs = []
 
         if role_type != "main" and role_type != "sub":
@@ -119,11 +131,6 @@ class Roles(commands.Cog):
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            message = await ctx.send('Please proceed your action at {} (deletion in 5s)'.format(bot_channel.mention))
-            await asyncio.sleep(1)
-            for i in range(4, 0, -1):
-                await message.edit(
-                    content="Please proceed your action at {} (deletion in {}s)".format(bot_channel.mention, i))
-                await asyncio.sleep(1)
-            await message.delete()
-            await ctx.message.delete()
+            await ctx.send('Please proceed your action at {}.'.format(bot_channel.mention))
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('Incorrect number of arguments.')
