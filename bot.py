@@ -11,13 +11,14 @@ import TOKEN
 from Modules.Default import Default
 from Modules.Mods import Mods
 from Modules.Roles import Roles
+from Modules.Pronoun import Pronouns
 from Modules.MyHelp import MyHelp
 from Modules.Authentication import Authentication
 from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.07
+R.E.I.N.A. 2.08
 
 Roles and Entertainment Information and Notification Agent
 
@@ -267,4 +268,5 @@ bot.add_cog(Roles(bot))
 bot.add_cog(Mods(bot))
 bot.add_cog(Subscribe(bot))
 bot.add_cog(Authentication(bot))
+bot.add_cog(Pronouns(bot))
 bot.run(TOKEN.TOKEN)
