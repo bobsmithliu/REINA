@@ -1,8 +1,6 @@
 from discord.ext import commands
 from Modules import CONSTANT
-from Modules.Checks import check_if_bot_spam
-
-import asyncio
+from Modules.Checks import check_if_role_or_bot_spam
 
 
 class Pronouns(commands.Cog):
@@ -11,7 +9,7 @@ class Pronouns(commands.Cog):
         self._last_member = None
 
     @commands.command()
-    @check_if_bot_spam()
+    @check_if_role_or_bot_spam()
     async def pronoun(self, ctx, choice):
         """Give yourself a pronoun role.
 
@@ -41,7 +39,7 @@ class Pronouns(commands.Cog):
         await ctx.send("Pronoun given. ")
 
     @commands.command()
-    @check_if_bot_spam()
+    @check_if_role_or_bot_spam()
     async def clear_pronoun(self, ctx):
         """Clear any pronoun you currently have.
         """
