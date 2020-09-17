@@ -8,17 +8,17 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import asyncio
 
 import TOKEN
-from Modules.Default import Default
+from Modules.General import General
 from Modules.Mods import Mods
 from Modules.Roles import Roles
-from Modules.Pronoun import Pronouns
+from Modules.Pronouns import Pronouns
 from Modules.MyHelp import MyHelp
 from Modules.Authentication import Authentication
 from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.09
+R.E.I.N.A. 2.10
 
 Roles and Entertainment Information and Notification Agent
 
@@ -258,7 +258,7 @@ class Subscribe(commands.Cog):
             await ctx.send('Incorrect number of arguments.')
 
 
-bot.add_cog(Default(bot))
+bot.add_cog(General(bot))
 bot.add_cog(Roles(bot))
 bot.add_cog(Mods(bot))
 bot.add_cog(Subscribe(bot))

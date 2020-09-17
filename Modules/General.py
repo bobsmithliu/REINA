@@ -1,6 +1,5 @@
 from discord.ext import commands
 import random
-import asyncio
 
 from Modules import CONSTANT
 from Modules.Checks import check_if_bot_spam
@@ -21,7 +20,7 @@ If, in any way, you are not comfortable with how your data is collected and used
 '''
 
 
-class Default(commands.Cog):
+class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -65,9 +64,24 @@ class Default(commands.Cog):
         """
         await ctx.send("You should {}. ".format(random.choice(prompts)))
 
+    @commands.command()
+    @check_if_bot_spam()
+    async def party(self, ctx):
+        """
+        Turn on/off this server's party game ping.
+        """
+        party_role = ctx.guild.get_role(755297696948027403)
+        if party_role in ctx.author.roles:
+            await ctx.author.remove_roles(party_role)
+            await ctx.send("Ping turned off. ")
+        else:
+            await ctx.author.add_roles(party_role)
+            await ctx.send("Ping turned on. ")
+
     @hi.error
     @rand_lyrics.error
     @should_i.error
+    @party.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
