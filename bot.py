@@ -163,9 +163,6 @@ class Subscribe(commands.Cog):
 
         if len(user_subscribable) == 0:
             bot_msg = await ctx.send("Since you subscribed to all programs, you have no programs you can subscribe to. ")
-            await asyncio.sleep(3)
-            await ctx.message.delete()
-            await bot_msg.delete()
             return
 
         description_str = ""
@@ -192,8 +189,6 @@ class Subscribe(commands.Cog):
             "operable": [role.id for role in user_subscribable]
         }
 
-        await asyncio.sleep(3)
-        await ctx.message.delete()
         await asyncio.sleep(60)
         if sub_msg.id in REACTIONABLES:
             await sub_msg.delete()
@@ -212,9 +207,6 @@ class Subscribe(commands.Cog):
 
         if len(user_subscribed) == 0:
             bot_msg = await ctx.send("Since you subscribed to no program, you have no programs to unsubscribe to. ")
-            await asyncio.sleep(3)
-            await ctx.message.delete()
-            await bot_msg.delete()
             return
 
         description_str = ""
@@ -241,8 +233,6 @@ class Subscribe(commands.Cog):
             "operable": [role.id for role in user_subscribed]
         }
 
-        await asyncio.sleep(3)
-        await ctx.message.delete()
         await asyncio.sleep(60)
         if sub_msg.id in REACTIONABLES:
             await sub_msg.delete()
