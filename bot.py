@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import discord
 import pytz
@@ -7,7 +8,6 @@ from textblob import TextBlob
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import asyncio
 
-import TOKEN
 from Modules.General import General
 from Modules.Mods import Mods
 from Modules.Roles import Roles
@@ -254,4 +254,4 @@ bot.add_cog(Mods(bot))
 bot.add_cog(Subscribe(bot))
 bot.add_cog(Authentication(bot))
 bot.add_cog(Pronouns(bot))
-bot.run(TOKEN.TOKEN)
+bot.run(os.getenv('DISCORD_TOKEN'))
