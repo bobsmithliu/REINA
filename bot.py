@@ -18,7 +18,7 @@ from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.10
+R.E.I.N.A. 2.11
 
 Roles and Entertainment Information and Notification Agent
 
