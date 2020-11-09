@@ -1,6 +1,5 @@
 from discord.ext import commands
 from Modules import CONSTANT
-import asyncio
 
 from Modules.Checks import check_if_role_or_bot_spam
 
@@ -24,6 +23,12 @@ class Roles(commands.Cog):
         ">role main Sally" will add Sally as your main role and make your nametag yellow.
         ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
 
+        Unit examples:
+
+        >role unit Cider
+        >role unit Bench
+        >role unit Keikoto
+
         You can enter multiple role names for this command.
         If you enter ">role main" with more than one role name, you will get the first valid role you entered in the sequence.
 
@@ -34,10 +39,10 @@ class Roles(commands.Cog):
         ">role sub Sally Sakura Ruri Jun" will add all these four roles to you.
         ">role main Sally Sakura Ruri Jun" will only add Sally as a main role, if you already had Sally as your main role, the operation will be rendered invalid.
 
-        Only the following roles may be added for main and sub roles:
+        Only the following roles may be added for 'main' and 'sub' roles:
         Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai,
 
-        Only the following roles may be added for unit roles:
+        Only the following roles may be added for 'unit' roles:
         Hareta Hi no Bench (use the word "Bench" to add), Keikoto saisei keikaku (use the word "Keikoto"), Ki no Nuketa Cider (Use the word "Cider")
         """
         role_names = [x.capitalize() for x in role_names]
@@ -46,10 +51,6 @@ class Roles(commands.Cog):
             await ctx.send("Missing required arguments. ")
 
         result_msgs = []
-
-        if role_type != "main" and role_type != "sub":
-            await ctx.send("Illegal operation.")
-            return
 
         for role_name in role_names:
             if role_name in CONSTANT.ROLEABLES:
