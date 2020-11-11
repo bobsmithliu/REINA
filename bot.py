@@ -18,7 +18,7 @@ from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.11
+R.E.I.N.A. 2.12
 
 Roles and Entertainment Information and Notification Agent
 
@@ -29,7 +29,22 @@ Use >help [command] to see the help text of a specific command.
 Use bot only in #bot spam
 '''
 
-bot = commands.Bot(command_prefix='>', description=BOT_DESCRIPTION, case_insensitive=True, help_command=MyHelp())
+intents = discord.Intents.default()
+intents.members = True
+intents.bans = False
+intents.emojis = False
+intents.integrations = False
+intents.webhooks = False
+intents.invites = False
+intents.voice_states = False
+intents.typing = False
+intents.dm_typing = False
+intents.guild_typing = False
+
+member_cache_flags = discord.MemberCacheFlags().none()
+member_cache_flags.joined = True
+
+bot = commands.Bot(command_prefix='>', description=BOT_DESCRIPTION, case_insensitive=True, help_command=MyHelp(), intents=intents)
 scheduler = AsyncIOScheduler(timezone="Asia/Tokyo")
 REACTIONABLES = {}
 COUNTER_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
