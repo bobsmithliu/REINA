@@ -1,8 +1,8 @@
 # REINA
-![](https://img.shields.io/badge/version-2.12-informational)
+![](https://img.shields.io/badge/version-2.13-informational)
 ![](https://img.shields.io/github/license/Skk-nsmt/REINA)
 
-R.E.I.N.A. ver 2.12
+R.E.I.N.A. ver 2.13
 
 Roles and Entertainment Information and Notification Agent
 

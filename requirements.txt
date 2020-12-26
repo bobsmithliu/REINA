@@ -6,7 +6,6 @@ attrs
 beautifulsoup4
 chardet
 click
-discord
 discord.py
 idna
 isort

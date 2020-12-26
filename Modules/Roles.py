@@ -20,8 +20,10 @@ class Roles(commands.Cog):
 
         Examples:
 
-        ">role main Sally" will add Sally as your main role and make your nametag yellow.
-        ">role sub Mizzy" will add Mizzy as a sub role without affecting your nametag colour.
+        ">role main Sally"
+        --- will add Sally as your main role and make your nametag yellow.
+        ">role sub Mizzy"
+        --- will add Mizzy as a sub role without affecting your nametag colour.
 
         Unit examples:
 
@@ -36,14 +38,23 @@ class Roles(commands.Cog):
 
         Examples:
 
-        ">role sub Sally Sakura Ruri Jun" will add all these four roles to you.
-        ">role main Sally Sakura Ruri Jun" will only add Sally as a main role, if you already had Sally as your main role, the operation will be rendered invalid.
+        ">role sub Sally Sakura Ruri Jun"
+        --- will add all these four roles to you.
+        ">role main Sally Sakura Ruri Jun"
+        --- will only add Sally as a main role, if you already had Sally as your main role, the operation will be rendered invalid.
 
         Only the following roles may be added for 'main' and 'sub' roles:
-        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai,
+
+        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane,
+        Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika,
+        Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi,
+        Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
 
         Only the following roles may be added for 'unit' roles:
-        Hareta Hi no Bench (use the word "Bench" to add), Keikoto saisei keikaku (use the word "Keikoto"), Ki no Nuketa Cider (Use the word "Cider")
+
+        >> Hareta Hi no Bench (use the word "Bench" to add),
+        >> Keikoto saisei keikaku (use the word "Keikoto"),
+        >> Ki no Nuketa Cider (Use the word "Cider")
         """
         role_names = [x.capitalize() for x in role_names]
 
@@ -113,12 +124,17 @@ class Roles(commands.Cog):
         role_type: Use 'main' or 'sub' to indicate which type of role you wish to delete. If you delete your main role, your nametag colour will change to that of your highest sub role until you add a new main role.
         role_name: The name of the role you want to delete, names are not case-sensitive, you can enter as many names as you want to.
 
-        E.g.: ">unrole main Sally" will remove Sally as your main role. If, say, you have Meimei as a sub role, your nametag colour will then be light blue until you add a new main role.
+        E.g.:
+        ">unrole main Sally"
+        --- will remove Sally as your main role. If, say, you have Meimei as a sub role, your nametag colour will then be light blue until you add a new main role.
 
         Multiple role deletion works similarly as >role does, for more help, send ">help role" to #bot spam.
 
         Only the following roles may be deleted:
-        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane, Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika, Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi, Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
+        Sally, Sakura, Ruri, Jun, Mizzy, Miyako, Kanaeru, Akane,
+        Nagomin, Miu, Meimei, Uta, Nicole, Chiharun, Reika,
+        Reinyan, Ayaka, Moe, Mikami, Rettan, Yuki, Ainacchi, Tsubomi,
+        Tamago, Gouda, Kaoruko, Nana, Miko, Komiya, Aida, Mukai
         """
         role_names = [x.capitalize() for x in role_names]
 

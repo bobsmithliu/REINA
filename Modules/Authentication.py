@@ -12,7 +12,7 @@ class Authentication(commands.Cog):
     @commands.dm_only()
     async def rule_acknowledged(self, ctx):
         if self.is_protection_on:
-            ctx.send("Unfortunately, the moderators of 22/7 server has turned on the server protection protocol, "
+            ctx.send("Unfortunately, the moderators of 22/7 server have turned on the server protection protocol, "
                      "new members may not join at this time. Please wait until the restriction is lifted. ")
         else:
             user_id = ctx.author.id
