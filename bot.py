@@ -18,7 +18,7 @@ from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
 
 BOT_DESCRIPTION = '''
-R.E.I.N.A. 2.13
+R.E.I.N.A. 2.14
 
 Roles and Entertainment Information and Notification Agent
 
@@ -67,8 +67,8 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(">help"))
 
     if scheduler.state == 0:
-        scheduler.add_job(prompt_keisanchuu, "cron", day_of_week='sat', hour=22, minute=30, args=[bot, 30])
-        scheduler.add_job(prompt_keisanchuu, "cron", day_of_week='sat', hour=22, minute=55, args=[bot, 5])
+        scheduler.add_job(prompt_kensanchuu, "cron", day_of_week='sat', hour=22, minute=30, start_date=datetime.datetime(2021, 1, 9), args=[bot, 30])
+        scheduler.add_job(prompt_kensanchuu, "cron", day_of_week='sat', hour=22, minute=55, start_date=datetime.datetime(2021, 1, 9), args=[bot, 5])
         scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=30, args=[bot, 30])
         scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=55, args=[bot, 5])
         print("Background Task Setup finished. ")
@@ -120,28 +120,28 @@ async def on_reaction_add(reaction, user):
             del REACTIONABLES[reaction.message.id]
 
 
-async def prompt_keisanchuu(bot_b, t_minus):
+async def prompt_kensanchuu(bot_b, t_minus):
     now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
     tv_radio_channel = bot.get_channel(465158208978157588)
-    keisanchuu_role = tv_radio_channel.guild.get_role(641112458291052584)
+    kensanchuu_role = tv_radio_channel.guild.get_role(641112458291052584)
 
     await tv_radio_channel.trigger_typing()
 
-    alert_embed = discord.Embed(title="Keisanchu Reminder",
+    alert_embed = discord.Embed(title="Kensanchu Reminder",
                                 type='rich',
                                 description="Hey guys! Time now is `{}`, The next episode of 22/7 {} is airing in **{} minutes**.\n"
                                             "You can watch it at:".format(now.strftime('%Y-%m-%d %H:%M %Z'),
-                                                                          keisanchuu_role.mention, t_minus))
+                                                                          kensanchuu_role.mention, t_minus))
 
     alert_embed.add_field(name="Link 1", value="https://www.zhanqi.tv/873082427")
-    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2261404032759")
+    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2405879258871")
     alert_embed.add_field(name="Link 3", value="https://vk.com/videos-177082369")
-    alert_embed.set_image(url="https://www.nanabunnonijyuuni.com/assets/img/tv/img_tv_visual.jpg")
+    alert_embed.set_image(url="https://nanabunnonijyuuni.com/images/4/a18/02ab0a833376c38b775887a818f8a.jpg")
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
 
-    await tv_radio_channel.send(content=keisanchuu_role.mention, embed=alert_embed)
+    await tv_radio_channel.send(content=kensanchuu_role.mention, embed=alert_embed)
 
 
 async def prompt_radio(bot_b, t_minus):
