@@ -20,23 +20,23 @@ class Pronouns(commands.Cog):
         Example: >pronoun they
         """
         if choice not in CONSTANT.PRONOUNABLES:
-            await ctx.send("Illegal choice. ")
+            await ctx.reply("Illegal choice. ")
             return
 
         role_ids = [role.id for role in ctx.author.roles]
         pronoun_roles = list(set(role_ids) & set(CONSTANT.PRONOUNS.values()))
 
         if pronoun_roles:
-            await ctx.send("You already have a pronoun, to remove your pronoun role, use `>clear_pronoun`. ")
+            await ctx.reply("You already have a pronoun, to remove your pronoun role, use `>clear_pronoun`. ")
             return
 
         role = ctx.guild.get_role(CONSTANT.PRONOUNS[choice])
         if role in ctx.author.roles:
-            await ctx.send("You already have that pronoun. ")
+            await ctx.reply("You already have that pronoun. ")
             return
 
         await ctx.author.add_roles(role)
-        await ctx.send("Pronoun given. ")
+        await ctx.reply("Pronoun given. ")
 
     @commands.command()
     @check_if_role_or_bot_spam()
@@ -49,15 +49,15 @@ class Pronouns(commands.Cog):
         if pronoun_roles:
             role = ctx.guild.get_role(pronoun_roles[0])
             await ctx.author.remove_roles(role)
-            await ctx.send("Pronoun removed.")
+            await ctx.reply("Pronoun removed.")
         else:
-            await ctx.send("You don't have any pronouns. ")
+            await ctx.reply("You don't have any pronouns. ")
 
     @pronoun.error
     @clear_pronoun.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}.'.format(bot_channel.mention))
+            await ctx.reply('Please proceed with your action at {}.'.format(bot_channel.mention))
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send('Incorrect number of arguments.')
+            await ctx.reply('Incorrect number of arguments.')

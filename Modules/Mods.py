@@ -68,7 +68,7 @@ class Mods(commands.Cog):
                 try:
                     parsed_time = time.strptime(planned_time, "%H:%M")
                 except ValueError:
-                    await ctx.send("Time cannot be parsed. ")
+                    await ctx.reply("Time cannot be parsed. ")
                     return
 
                 stream_time = JP_TZ.localize(datetime.datetime(year=now.year,
@@ -98,7 +98,7 @@ class Mods(commands.Cog):
 
                 stream_msg = await stream_channel.send(embed=announcement_embed)
                 await stream_msg.pin()
-                await ctx.send("Success. ")
+                await ctx.reply("Success. ")
 
                 time_now = datetime.datetime.now(datetime.timezone.utc)
                 seconds_to_unpin = int((stream_time - time_now).total_seconds())
@@ -107,10 +107,10 @@ class Mods(commands.Cog):
                     await stream_msg.unpin()
 
             except ValueError:
-                await ctx.send("HTTP request to Showroom website failed. ")
+                await ctx.reply("HTTP request to Showroom website failed. ")
 
         else:
-            await ctx.send("Illegal name.")
+            await ctx.reply("Illegal name.")
 
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
@@ -136,7 +136,7 @@ class Mods(commands.Cog):
             try:
                 parsed_time = time.strptime(planned_time, "%H:%M")
             except ValueError:
-                await ctx.send("Time cannot be parsed. ")
+                await ctx.reply("Time cannot be parsed. ")
                 return
 
             stream_time = JP_TZ.localize(datetime.datetime(year=now.year,
@@ -165,17 +165,17 @@ class Mods(commands.Cog):
 
             stream_msg = await stream_channel.send(embed=announcement_embed)
             await stream_msg.pin()
-            await ctx.send("Success. ")
+            await ctx.reply("Success. ")
         else:
-            await ctx.send("You've put an illegal name or this person does not have an Instagram account yet. ")
+            await ctx.reply("You've put an illegal name or this person does not have an Instagram account yet. ")
 
     @announce_sr.error
     @announce_insta.error
     async def command_error(self, ctx, error):
         bot_channel = ctx.guild.get_channel(336287198510841856)
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed your action at {}. '.format(bot_channel.mention))
+            await ctx.reply('Please proceed with your action at {}. '.format(bot_channel.mention))
         if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.TooManyArguments):
-            await ctx.send('Incorrect number of arguments.')
+            await ctx.reply('Incorrect number of arguments.')
         if isinstance(error, commands.MissingAnyRole):
-            await ctx.send("You are not in the list of privileged users, this incident will be reported. (https://xkcd.com/838/)")
+            await ctx.reply("You are not in the list of privileged users, this incident will be reported. (https://xkcd.com/838/)")
