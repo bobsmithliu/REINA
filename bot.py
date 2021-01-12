@@ -77,9 +77,9 @@ async def on_ready() -> None:
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(">help"))
 
     if scheduler.state == 0:
-        scheduler.add_job(prompt_kensanchuu, "cron", day_of_week='sat', hour=22, minute=30,
+        scheduler.add_job(prompt_kenzanchuu, "cron", day_of_week='sat', hour=22, minute=30,
                           start_date=datetime.datetime(2021, 1, 9), args=[bot, 30])
-        scheduler.add_job(prompt_kensanchuu, "cron", day_of_week='sat', hour=22, minute=55,
+        scheduler.add_job(prompt_kenzanchuu, "cron", day_of_week='sat', hour=22, minute=55,
                           start_date=datetime.datetime(2021, 1, 9), args=[bot, 5])
         scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=30, args=[bot, 30])
         scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=55, args=[bot, 5])
@@ -133,17 +133,17 @@ async def on_reaction_add(reaction: discord.Reaction, user: discord.Member):
             del REACTIONABLES[reaction.message.id]
 
 
-async def prompt_kensanchuu(bot_b: commands.Bot, t_minus: int) -> None:
+async def prompt_kenzanchuu(bot_b: commands.Bot, t_minus: int) -> None:
     now: datetime.datetime = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
     tv_radio_channel: discord.TextChannel = bot.get_channel(465158208978157588)
-    kensanchuu_role: discord.Role = tv_radio_channel.guild.get_role(641112458291052584)
+    kenzanchuu_role: discord.Role = tv_radio_channel.guild.get_role(641112458291052584)
 
     await tv_radio_channel.trigger_typing()
 
-    alert_embed: discord.Embed = discord.Embed(title="Kensanchu Reminder", type='rich',
+    alert_embed: discord.Embed = discord.Embed(title="Kenzanchu Reminder", type='rich',
                                                description=TV_DESCRIPTION.format(now.strftime('%Y-%m-%d %H:%M %Z'),
-                                                                                 kensanchuu_role.mention, t_minus))
+                                                                                 kenzanchuu_role.mention, t_minus))
 
     alert_embed.add_field(name="Link 1", value="https://www.zhanqi.tv/873082427")
     alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2405879258871")
@@ -152,7 +152,7 @@ async def prompt_kensanchuu(bot_b: commands.Bot, t_minus: int) -> None:
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
 
-    await tv_radio_channel.send(content=kensanchuu_role.mention, embed=alert_embed)
+    await tv_radio_channel.send(content=kenzanchuu_role.mention, embed=alert_embed)
 
 
 async def prompt_radio(bot_b: commands.Bot, t_minus: int) -> None:
