@@ -7,6 +7,11 @@ class Authentication(commands.Cog):
         self.bot: commands.Bot = bot
         self.is_protection_on: bool = False
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member) -> None:
+        new_member_role: discord.Role = self.bot.get_channel(465158208978157588).guild.get_role(663581221967757313)
+        await member.add_roles(new_member_role)
+
     @commands.command()
     @commands.dm_only()
     async def rule_acknowledged(self, ctx: commands.Context) -> None:
