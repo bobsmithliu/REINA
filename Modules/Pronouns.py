@@ -1,16 +1,17 @@
+import discord
 from discord.ext import commands
+
 from Modules import CONSTANT
 from Modules.Checks import check_if_role_or_bot_spam
 
 
 class Pronouns(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self._last_member = None
+    def __init__(self, bot: commands.Bot):
+        self.bot: commands.Bot = bot
 
     @commands.command()
     @check_if_role_or_bot_spam()
-    async def pronoun(self, ctx, choice):
+    async def pronoun(self, ctx: commands.Context, choice: str):
         """Give yourself a pronoun role.
 
         Available choices are "they", "she", "he", "ask".
@@ -23,14 +24,14 @@ class Pronouns(commands.Cog):
             await ctx.reply("Illegal choice. ")
             return
 
-        role_ids = [role.id for role in ctx.author.roles]
-        pronoun_roles = list(set(role_ids) & set(CONSTANT.PRONOUNS.values()))
+        role_ids: list[int] = [role.id for role in ctx.author.roles]
+        pronoun_roles: list[int] = list(set(role_ids) & set(CONSTANT.PRONOUNS.values()))
 
         if pronoun_roles:
             await ctx.reply("You already have a pronoun, to remove your pronoun role, use `>clear_pronoun`. ")
             return
 
-        role = ctx.guild.get_role(CONSTANT.PRONOUNS[choice])
+        role: discord.Role = ctx.guild.get_role(CONSTANT.PRONOUNS[choice])
         if role in ctx.author.roles:
             await ctx.reply("You already have that pronoun. ")
             return
@@ -40,24 +41,15 @@ class Pronouns(commands.Cog):
 
     @commands.command()
     @check_if_role_or_bot_spam()
-    async def clear_pronoun(self, ctx):
+    async def clear_pronoun(self, ctx: commands.Context):
         """Clear any pronoun you currently have.
         """
-        role_ids = [role.id for role in ctx.author.roles]
-        pronoun_roles = list(set(role_ids) & set(CONSTANT.PRONOUNS.values()))
+        role_ids: list[int] = [role.id for role in ctx.author.roles]
+        pronoun_roles: list[int] = list(set(role_ids) & set(CONSTANT.PRONOUNS.values()))
 
         if pronoun_roles:
-            role = ctx.guild.get_role(pronoun_roles[0])
+            role: discord.Role = ctx.guild.get_role(pronoun_roles[0])
             await ctx.author.remove_roles(role)
             await ctx.reply("Pronoun removed.")
         else:
             await ctx.reply("You don't have any pronouns. ")
-
-    @pronoun.error
-    @clear_pronoun.error
-    async def command_error(self, ctx, error):
-        bot_channel = ctx.guild.get_channel(336287198510841856)
-        if isinstance(error, commands.CheckFailure):
-            await ctx.reply('Please proceed with your action at {}.'.format(bot_channel.mention))
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply('Incorrect number of arguments.')

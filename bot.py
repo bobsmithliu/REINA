@@ -1,17 +1,19 @@
 import datetime
 import os
+import sys
+import traceback
 
-import discord
-import pytz
-from discord.ext import commands
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+import discord
+from discord.ext import commands
+import pytz
 
+from Modules.Authentication import Authentication
 from Modules.General import General
 from Modules.Mods import Mods
-from Modules.Roles import Roles
-from Modules.Pronouns import Pronouns
 from Modules.MyHelp import MyHelp
-from Modules.Authentication import Authentication
+from Modules.Pronouns import Pronouns
+from Modules.Roles import Roles
 from Modules.Subscribe import Subscribe
 
 # === CONSTANTS ===
@@ -28,7 +30,7 @@ Fill out the form as best you can and click the bottom button to proceed to the 
 '''
 
 BOT_DESCRIPTION: str = '''
-R.E.I.N.A. 2.15
+R.E.I.N.A. 2.16
 
 Roles and Entertainment Information and Notification Agent
 
@@ -87,7 +89,20 @@ async def on_ready() -> None:
         print("Scheduler started. ")
 
 
-# ====== Helpers ======
+@bot.event
+async def on_command_error(ctx: commands.Context, error: commands.CommandError) -> None:
+    print("Exception in command {}: ".format(ctx.command), file=sys.stderr)
+    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+
+    if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.TooManyArguments):
+        await ctx.reply('Incorrect number of arguments.')
+
+    if isinstance(error, commands.CheckFailure):
+        bot_channel: discord.TextChannel = ctx.guild.get_channel(336287198510841856)
+        await ctx.reply('Please proceed with your action at {}.'.format(bot_channel.mention))
+
+
+# === Helpers ===
 
 async def prompt_kenzanchuu(bot_b: commands.Bot, t_minus: int) -> None:
     now: datetime.datetime = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
@@ -129,6 +144,7 @@ async def prompt_radio(bot_b: commands.Bot, t_minus: int) -> None:
 
     await tv_radio_channel.send(content=radio_role.mention, embed=alert_embed)
 
+# === Helpers ===
 
 bot.add_cog(General(bot))
 bot.add_cog(Roles(bot))

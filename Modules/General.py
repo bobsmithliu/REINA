@@ -1,8 +1,8 @@
+import random
+
 import discord
 from discord.ext import commands
 from textblob import TextBlob
-
-import random
 
 from Modules import CONSTANT
 from Modules.Checks import check_if_bot_spam
@@ -90,14 +90,3 @@ class General(commands.Cog):
         else:
             await ctx.author.add_roles(party_role)
             await ctx.reply("Ping turned on. ")
-
-    @hi.error
-    @rand_lyrics.error
-    @should_i.error
-    @party.error
-    async def command_error(self, ctx: commands.Context, error) -> None:
-        bot_channel: discord.TextChannel = ctx.guild.get_channel(336287198510841856)
-        if isinstance(error, commands.CheckFailure):
-            await ctx.reply('Please proceed with your action at {}.'.format(bot_channel.mention))
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply('Incorrect number of arguments.')

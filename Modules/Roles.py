@@ -1,17 +1,17 @@
+import discord
 from discord.ext import commands
-from Modules import CONSTANT
 
+from Modules import CONSTANT
 from Modules.Checks import check_if_role_or_bot_spam
 
 
 class Roles(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self._last_member = None
 
     @commands.command()
     @check_if_role_or_bot_spam()
-    async def role(self, ctx, role_type, *role_names):
+    async def role(self, ctx: commands.Context, role_type: str, *role_names):
         """
         Add a role.
 
@@ -75,7 +75,7 @@ class Roles(commands.Cog):
                         role_ids: list[int] = [role.id for role in ctx.author.roles]
                         main_roles = list(set(role_ids) & set(CONSTANT.MAIN_ROLES_ID.values()))
 
-                        role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
 
                         if role in ctx.author.roles:
                             result_msgs.append("You already have that role!")
@@ -89,7 +89,7 @@ class Roles(commands.Cog):
                     if role_name in CONSTANT.UNIT_ROLES_ID:
                         result_msgs.append("You indicated sub roles, but you entered an invalid role name. ")
                     else:
-                        role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
 
                         if role in ctx.author.roles:
                             result_msgs.append("You already have that role!")
@@ -100,7 +100,7 @@ class Roles(commands.Cog):
                     if role_name in CONSTANT.MAIN_ROLES_ID.keys() or role_name in CONSTANT.SUB_ROLES_ID.keys():
                         result_msgs.append("You indicated unit roles, but you entered an invalid role name. ")
                     else:
-                        role = ctx.guild.get_role(CONSTANT.UNIT_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.UNIT_ROLES_ID[role_name])
 
                         if role in ctx.author.roles:
                             result_msgs.append("You already have that role!")
@@ -112,7 +112,7 @@ class Roles(commands.Cog):
                     break
             else:
                 result_msgs.append("Illegal role name. Type `>help role` for a list of acceptable role names. ")
-        final_msg = ""
+        final_msg: str = ""
         for name, result in zip(role_names, result_msgs):
             final_msg += "**{}**: {} \n".format(name, result)
 
@@ -120,7 +120,7 @@ class Roles(commands.Cog):
 
     @commands.command()
     @check_if_role_or_bot_spam()
-    async def unrole(self, ctx, role_type, *role_names):
+    async def unrole(self, ctx: commands.Context, role_type: str, *role_names):
         """
         Delete a role.
 
@@ -137,30 +137,30 @@ class Roles(commands.Cog):
 
         Multiple role deletion works similarly as >role does, for more help, send ">help role".
         """
-        role_names = [x.capitalize() for x in role_names]
+        role_names: list[str] = [x.capitalize() for x in role_names]
 
         if not role_names:
             await ctx.reply("Missing required arguments. ")
 
-        result_msgs = []
+        result_msgs: list[str] = []
 
         for role_name in role_names:
             if role_name in CONSTANT.ROLEABLES:
                 if role_type == 'main':
                     if role_name in CONSTANT.MAIN_ROLES_ID.keys():
-                        role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
                     else:
                         result_msgs.append("Illegal role name for main roles. ")
                         continue
                 elif role_type == 'sub':
                     if role_name in CONSTANT.SUB_ROLES_ID.keys():
-                        role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
                     else:
                         result_msgs.append("Illegal role name for sub roles. ")
                         continue
                 elif role_type == 'unit':
                     if role_name in CONSTANT.UNIT_ROLES_ID.keys():
-                        role = ctx.guild.get_role(CONSTANT.UNIT_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.UNIT_ROLES_ID[role_name])
                     else:
                         result_msgs.append("Illegal role name for unit roles. ")
                         continue
@@ -175,17 +175,8 @@ class Roles(commands.Cog):
                     result_msgs.append("Role removed.")
             else:
                 result_msgs.append("Illegal role name. Type `>help unrole` for a list of acceptable role names. ")
-        final_msg = ""
+        final_msg: str = ""
         for name, result in zip(role_names, result_msgs):
             final_msg += "**{}**: {} \n".format(name, result)
 
         await ctx.reply(final_msg)
-
-    @role.error
-    @unrole.error
-    async def command_error(self, ctx, error):
-        bot_channel = ctx.guild.get_channel(336287198510841856)
-        if isinstance(error, commands.CheckFailure):
-            await ctx.reply('Please proceed with your action at {}.'.format(bot_channel.mention))
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply('Incorrect number of arguments.')

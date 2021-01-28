@@ -3,9 +3,8 @@ import asyncio
 import discord
 from discord.ext import commands
 
-
-from Modules.Checks import check_if_bot_spam
 from Modules import CONSTANT
+from Modules.Checks import check_if_bot_spam
 
 
 class Subscribe(commands.Cog):
@@ -126,12 +125,3 @@ class Subscribe(commands.Cog):
         if sub_msg.id in self.REACTIONABLES:
             await sub_msg.delete()
             del self.REACTIONABLES[sub_msg.id]
-
-    @subscribe.error
-    @unsubscribe.error
-    async def command_error(self, ctx, error):
-        bot_channel: discord.TextChannel = ctx.guild.get_channel(336287198510841856)
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send('Please proceed with your action at {}.'.format(bot_channel.mention))
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send('Incorrect number of arguments.')

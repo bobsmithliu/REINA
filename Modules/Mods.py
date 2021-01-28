@@ -11,11 +11,11 @@ from discord.ext import commands
 from Modules import CONSTANT
 from Modules.Checks import check_if_bot_spam
 
-JP_TZ = pytz.timezone('Asia/Tokyo')
-UNIVERSAL_TZ = pytz.timezone('UTC')
-PACIFIC_TZ = pytz.timezone('America/Los_Angeles')
-CENTRAL_TZ = pytz.timezone('America/Chicago')
-EASTERN_TZ = pytz.timezone('America/New_York')
+JP_TZ: pytz.UTC = pytz.timezone('Asia/Tokyo')
+UNIVERSAL_TZ: pytz.UTC = pytz.timezone('UTC')
+PACIFIC_TZ: pytz.UTC = pytz.timezone('America/Los_Angeles')
+CENTRAL_TZ: pytz.UTC = pytz.timezone('America/Chicago')
+EASTERN_TZ: pytz.UTC = pytz.timezone('America/New_York')
 
 TIMEZONES = [
     ("Japan Time", JP_TZ),
@@ -24,18 +24,17 @@ TIMEZONES = [
     ("Central Time", CENTRAL_TZ),
     ("Eastern Time", EASTERN_TZ)]
 
-TIME_FORMAT_STRING = "%Y-%m-%d %I:%M%p"
+TIME_FORMAT_STRING: str = "%Y-%m-%d %I:%M%p"
 
 
 class Mods(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self._last_member = None
+    def __init__(self, bot: commands.Bot):
+        self.bot: commands.Bot = bot
 
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce_sr(self, ctx, person, date, planned_time, unpin_time=3600):
+    async def announce_sr(self, ctx: commands.Context, person: str, date: str, planned_time: str, unpin_time: str = "3600"):
         """
         (Mod-only command) Make Showroom stream announcements.
 
@@ -48,7 +47,7 @@ class Mods(commands.Cog):
 
         Valid first names are: Chiharu, Ruri, Mei, Uta, Reina, Sally, Aina, Kanae, Urara, Moe, Mizuha, Nagomi
         """
-        stream_channel = ctx.guild.get_channel(336281736633909258)
+        stream_channel: discord.TextChannel = ctx.guild.get_channel(336281736633909258)
 
         headers = {
             'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.62 Safari/537.36",
@@ -57,7 +56,7 @@ class Mods(commands.Cog):
 
         if person in CONSTANT.SHOWROOM_STREAM_LINKS:
             await stream_channel.trigger_typing()
-            now = datetime.datetime.now(JP_TZ)
+            now: datetime.datetime = datetime.datetime.now(JP_TZ)
 
             try:
                 async with aiohttp.ClientSession() as session:
@@ -115,7 +114,7 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce_insta(self, ctx, person, date, planned_time):
+    async def announce_insta(self, ctx: commands.Context, person: str, date: str, planned_time: str):
         """
         (Mod-only command) Make Instagram stream announcements.
 
@@ -169,13 +168,7 @@ class Mods(commands.Cog):
         else:
             await ctx.reply("You've put an illegal name or this person does not have an Instagram account yet. ")
 
-    @announce_sr.error
-    @announce_insta.error
-    async def command_error(self, ctx, error):
-        bot_channel = ctx.guild.get_channel(336287198510841856)
-        if isinstance(error, commands.CheckFailure):
-            await ctx.reply('Please proceed with your action at {}. '.format(bot_channel.mention))
-        if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.TooManyArguments):
-            await ctx.reply('Incorrect number of arguments.')
+    async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError) -> None:
         if isinstance(error, commands.MissingAnyRole):
-            await ctx.reply("You are not in the list of privileged users, this incident will be reported. (https://xkcd.com/838/)")
+            await ctx.reply("You are not in the list of privileged users, "
+                            "this incident will be reported. (https://xkcd.com/838/)")
