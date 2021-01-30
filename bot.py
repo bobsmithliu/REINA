@@ -41,6 +41,12 @@ Use >help [command] to see the help text of a specific command.
 Use bot only in #bot spam
 '''
 
+KENZANCHUU_LINKS: [str] = [
+    "https://www.zhanqi.tv/873082427",
+    "https://ok.ru/videoembed/2704181894903",
+    "https://vk.com/videos-177082369"
+]
+
 # === Intents Section ===
 
 intents: discord.Intents = discord.Intents.default()
@@ -116,9 +122,9 @@ async def prompt_kenzanchuu(bot_b: commands.Bot, t_minus: int) -> None:
                                                description=TV_DESCRIPTION.format(now.strftime('%Y-%m-%d %H:%M %Z'),
                                                                                  kenzanchuu_role.mention, t_minus))
 
-    alert_embed.add_field(name="Link 1", value="https://www.zhanqi.tv/873082427")
-    alert_embed.add_field(name="Link 2", value="https://ok.ru/videoembed/2405879258871")
-    alert_embed.add_field(name="Link 3", value="https://vk.com/videos-177082369")
+    for index, item in enumerate(KENZANCHUU_LINKS, start=1):
+        alert_embed.add_field(name="Link {}".format(index), value=item)
+
     alert_embed.set_image(url="https://nanabunnonijyuuni.com/images/4/a18/02ab0a833376c38b775887a818f8a.jpg")
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
