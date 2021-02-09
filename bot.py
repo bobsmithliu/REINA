@@ -43,7 +43,7 @@ Use bot only in #bot spam
 
 KENZANCHUU_LINKS: [str] = [
     "https://www.zhanqi.tv/873082427",
-    "https://ok.ru/videoembed/2704181894903",
+    "https://ok.ru/videoembed/2733731028727",
     "https://vk.com/videos-177082369"
 ]
 
