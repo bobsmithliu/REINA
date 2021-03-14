@@ -1,5 +1,7 @@
 import discord
 
+# ====== Oshi roles ======
+
 SUB_ROLES_ID: dict[str, int] = {
     'Tamago': 497370840824807424,
     'Tsubomi': 497369993428729856,
@@ -75,6 +77,8 @@ UNIT_ROLES_ID: dict[str, int] = {
 
 ROLEABLES: list[str] = list(MAIN_ROLES_ID.keys()) + list(UNIT_ROLES_ID.keys())
 
+# ====== Pronouns ======
+
 PRONOUNS: dict[str, int] = {
     'they': 754764762528612392,
     'she': 754764648128970784,
@@ -84,22 +88,41 @@ PRONOUNS: dict[str, int] = {
 
 PRONOUNABLES: list[str] = list(PRONOUNS.keys())
 
+# ====== SR alert ======
+
+SHOWROOM_ALERT_ROLES: dict[str, int] = {
+    "Sally": 820545632325992519,
+    "Ruri": 820545641041362955,
+    "Mizzy": 820545636070981673,
+    "Kanaeru": 820545645668204554,
+    "Nagomin": 820545650529796126,
+    "Uta": 820545654660923413,
+    "Reinyan": 820545659039907850,
+    "Moe": 820545663246663690,
+    "Rettan": 820545667873243146,
+    "Ainacchi": 820545671744192513
+}
+
+SHOWROOM_ALERT_ROLEABLES: list[str] = list(SHOWROOM_ALERT_ROLES.keys())
+
+# ====== Other functions ======
+
 SUBSCRIBABLE: list[int] = [694627966495490078, 641112458291052584]
 
 SHOWROOM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color]] = {
-    'Chiharu': ('Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()),
+    # 'Chiharu': ('Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()),
     'Ruri': ('Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()),
-    'Mei': ('Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()),
+    # 'Mei': ('Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()),
     'Uta': ('Kawase Uta', 'https://www.showroom-live.com/kawaseuta', discord.Color.blue()),
-    'Reina': ('Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta()),
+    'Reinyan': ('Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta()),
     'Sally': ('Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()),
-    'Aina': ('Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()),
-    'Kanae': ('Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple()),
-    'Urara': ('Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242)),
+    'Ainacchi': ('Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()),
+    'Kanaeru': ('Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple()),
+    'Rettan': ('Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242)),
     'Moe': ('Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta()),
-    'Mizuha': ('Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()),
-    'Nagomi': ('Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)),
-    'Nananiji': ('Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue())
+    'Mizzy': ('Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()),
+    'Nagomin': ('Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)),
+    # 'Nananiji': ('Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue())
 }
 
 INSTAGRAM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color]] = {

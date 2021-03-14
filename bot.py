@@ -3,17 +3,19 @@ import os
 import sys
 import traceback
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import discord
-from discord.ext import commands
 import pytz
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from discord.ext import commands
 
+import Modules.Checks
 from Modules.Authentication import Authentication
 from Modules.General import General
 from Modules.Mods import Mods
 from Modules.MyHelp import MyHelp
 from Modules.Pronouns import Pronouns
 from Modules.Roles import Roles
+from Modules.Showroom import Showroom
 from Modules.Subscribe import Subscribe
 
 # === CONSTANTS ===
@@ -25,18 +27,18 @@ You can watch it at:
 
 RADIO_DESCRIPTION: str = '''
 Hey guys! Time now is `{}`, This week's {} Plus will start in **{} minutes**. \n\n
-If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n 
+If it's your first time viewing, you will be directed to a page requesting some simple demographics info. \n
 Fill out the form as best you can and click the bottom button to proceed to the stream.
 '''
 
 BOT_DESCRIPTION: str = '''
-R.E.I.N.A. 2.16
+R.E.I.N.A. 2.17
 
 Roles and Entertainment Information and Notification Agent
 
 Licensed under WTFPL
 
-Use >help [command] to see the help text of a specific command. 
+Use >help [command] to see the help text of a specific command.
 
 Use bot only in #bot spam
 '''
@@ -102,10 +104,12 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError) 
 
     if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.TooManyArguments):
         await ctx.reply('Incorrect number of arguments.')
+        return
 
-    if isinstance(error, commands.CheckFailure):
+    if isinstance(error, Modules.Checks.IncorrectChannel):
         bot_channel: discord.TextChannel = ctx.guild.get_channel(336287198510841856)
         await ctx.reply('Please proceed with your action at {}.'.format(bot_channel.mention))
+        return
 
 
 # === Helpers ===
@@ -158,4 +162,6 @@ bot.add_cog(Mods(bot))
 bot.add_cog(Subscribe(bot))
 bot.add_cog(Authentication(bot))
 bot.add_cog(Pronouns(bot))
+bot.add_cog(Showroom(bot))
+
 bot.run(os.getenv("DISCORD_TOKEN"))

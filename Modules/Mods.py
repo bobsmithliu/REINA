@@ -9,6 +9,7 @@ import pytz
 from discord.ext import commands
 
 from Modules import CONSTANT
+from Modules.CONSTANT import SHOWROOM_ALERT_ROLES
 from Modules.Checks import check_if_bot_spam
 
 JP_TZ: pytz.UTC = pytz.timezone('Asia/Tokyo')
@@ -34,18 +35,21 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce_sr(self, ctx: commands.Context, person: str, date: str, planned_time: str, unpin_time: str = "3600"):
+    async def announce_sr(self, ctx: commands.Context, person: str, date: str, planned_time: str,
+                          unpin_time: str = "3600"):
         """
         (Mod-only command) Make Showroom stream announcements.
 
         Make Showroom stream announcements at #227-streams.
 
-        person: use member's first name, or use "Nananiji" for Nananiji Room stream on Showroom.
-        date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
-        planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24-hour standard.
-        unpin_time: Unpin the announcement embed after this many seconds, default value is an hour (3600 seconds), must be an integer.
+        <person>: use member's first name, or use "Nananiji" for Nananiji Room stream on Showroom.
+        <date>: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
+        <planned_time>: "<two_digit_hour>:<two_digit_minute>" format in 24-hour standard.
+        <unpin_time>: Unpin the announcement embed after this many seconds,
+                    default value is an hour (3600 seconds), must be an integer.
 
-        Valid first names are: Chiharu, Ruri, Mei, Uta, Reina, Sally, Aina, Kanae, Urara, Moe, Mizuha, Nagomi
+        Valid first names are:
+            Sally, Ruri, Mizzy, Kanaeru, Nagomin, Uta, Reinyan, Moe, Rettan, Ainacchi
         """
         stream_channel: discord.TextChannel = ctx.guild.get_channel(336281736633909258)
 
@@ -55,6 +59,8 @@ class Mods(commands.Cog):
         }
 
         if person in CONSTANT.SHOWROOM_STREAM_LINKS:
+            role_to_ping: discord.Role = ctx.guild.get_role(SHOWROOM_ALERT_ROLES[person])
+
             await stream_channel.trigger_typing()
             now: datetime.datetime = datetime.datetime.now(JP_TZ)
 
@@ -95,7 +101,7 @@ class Mods(commands.Cog):
                 announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
                                               icon_url=ctx.author.avatar_url)
 
-                stream_msg = await stream_channel.send(embed=announcement_embed)
+                stream_msg = await stream_channel.send(content=role_to_ping.mention, embed=announcement_embed)
                 await stream_msg.pin()
                 await ctx.reply("Success. ")
 
@@ -124,7 +130,8 @@ class Mods(commands.Cog):
         date: use either "today" or "tomorrow" to indicate whether the stream is happening today or tomorrow.
         planned_time: "<two_digit_hour>:<two_digit_minute>" format in 24-hour standard.
 
-        Valid first names are: Chiharu, Reina, Sally, Aina, Kanae, Urara, Moe
+        Valid first names are:
+            Chiharu, Reina, Sally, Aina, Kanae, Urara, Moe
         """
         stream_channel = ctx.guild.get_channel(336281736633909258)
 

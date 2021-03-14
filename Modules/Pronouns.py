@@ -14,11 +14,15 @@ class Pronouns(commands.Cog):
     async def pronoun(self, ctx: commands.Context, choice: str):
         """Give yourself a pronoun role.
 
+        choice: the pronoun you wish to get.
+
         Available choices are "they", "she", "he", "ask".
+
         "Ask" means you want people to ask you what your pronoun is.
         You can only have one pronoun.
 
-        Example: >pronoun they
+        Example:
+            >pronoun they
         """
         if choice not in CONSTANT.PRONOUNABLES:
             await ctx.reply("Illegal choice. ")
@@ -42,7 +46,8 @@ class Pronouns(commands.Cog):
     @commands.command()
     @check_if_role_or_bot_spam()
     async def clear_pronoun(self, ctx: commands.Context):
-        """Clear any pronoun you currently have.
+        """
+        Clear any pronoun you currently have.
         """
         role_ids: list[int] = [role.id for role in ctx.author.roles]
         pronoun_roles: list[int] = list(set(role_ids) & set(CONSTANT.PRONOUNS.values()))
