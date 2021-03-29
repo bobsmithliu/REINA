@@ -143,22 +143,22 @@ class Roles(commands.Cog):
         result_msgs: list[str] = []
 
         for role_name in role_names:
-            if role_name in CONSTANT.ROLEABLES:
+            if role_name in CONSTANT.GENERAL_ROLEABLES:
                 if role_type == 'main':
-                    if role_name in CONSTANT.MAIN_ROLES_ID.keys():
-                        role: discord.Role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
+                    if role_name in CONSTANT.ROLES_ID["main"].keys():
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.ROLES_ID["main"][role_name])
                     else:
                         result_msgs.append("Illegal role name for main roles. ")
                         continue
                 elif role_type == 'sub':
-                    if role_name in CONSTANT.SUB_ROLES_ID.keys():
-                        role: discord.Role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
+                    if role_name in CONSTANT.ROLES_ID["sub"].keys():
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.ROLES_ID["sub"][role_name])
                     else:
                         result_msgs.append("Illegal role name for sub roles. ")
                         continue
                 elif role_type == 'unit':
-                    if role_name in CONSTANT.UNIT_ROLES_ID.keys():
-                        role: discord.Role = ctx.guild.get_role(CONSTANT.UNIT_ROLES_ID[role_name])
+                    if role_name in CONSTANT.ROLES_ID["unit"].keys():
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.ROLES_ID["unit"][role_name])
                     else:
                         result_msgs.append("Illegal role name for unit roles. ")
                         continue
