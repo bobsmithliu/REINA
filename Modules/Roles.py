@@ -62,16 +62,14 @@ class Roles(commands.Cog):
 
         result_msgs: list[str] = []
 
-        for role_name in role_names:
-            if role_name in CONSTANT.ROLEABLES:
-                if role_type == 'main':
-                    if role_name in CONSTANT.UNIT_ROLES_ID:
-                        result_msgs.append("You indicated main roles, but you entered an invalid role name. ")
-                    else:
+        if role_type in CONSTANT.ROLES_ID.keys():
+            for role_name in role_names:
+                if role_name in CONSTANT.GENERAL_ROLEABLES:
+                    if role_type == "main":
                         role_ids: list[int] = [role.id for role in ctx.author.roles]
-                        main_roles = list(set(role_ids) & set(CONSTANT.MAIN_ROLES_ID.values()))
+                        main_roles = list(set(role_ids) & set(CONSTANT.ROLES_ID["main"].values()))
 
-                        role: discord.Role = ctx.guild.get_role(CONSTANT.MAIN_ROLES_ID[role_name])
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.ROLES_ID["main"][role_name])
 
                         if role in ctx.author.roles:
                             result_msgs.append("You already have that role!")
@@ -81,33 +79,35 @@ class Roles(commands.Cog):
                             await ctx.author.add_roles(role)
                             result_msgs.append("Role added.")
                         break
-                elif role_type == 'sub':
-                    if role_name in CONSTANT.UNIT_ROLES_ID:
-                        result_msgs.append("You indicated sub roles, but you entered an invalid role name. ")
-                    else:
-                        role: discord.Role = ctx.guild.get_role(CONSTANT.SUB_ROLES_ID[role_name])
+                    elif role_type == "sub":
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.ROLES_ID["sub"][role_name])
 
                         if role in ctx.author.roles:
                             result_msgs.append("You already have that role!")
                         else:
                             await ctx.author.add_roles(role)
                             result_msgs.append("Role added.")
-                elif role_type == 'unit':
-                    if role_name in CONSTANT.MAIN_ROLES_ID.keys() or role_name in CONSTANT.SUB_ROLES_ID.keys():
-                        result_msgs.append("You indicated unit roles, but you entered an invalid role name. ")
                     else:
-                        role: discord.Role = ctx.guild.get_role(CONSTANT.UNIT_ROLES_ID[role_name])
+                        await ctx.reply("Illegal operation. Check your <role_type> input. ")
+                        return
+                elif role_name in CONSTANT.UNIT_ROLABLES:
+                    if role_type == "unit":  # verify that the type is actually unit
+                        role: discord.Role = ctx.guild.get_role(CONSTANT.ROLES_ID["unit"][role_name])
 
                         if role in ctx.author.roles:
                             result_msgs.append("You already have that role!")
                         else:
                             await ctx.author.add_roles(role)
                             result_msgs.append("Role added.")
+                    else:
+                        await ctx.reply("Illegal operation. Check your <role_type> input. ")
+                        return
                 else:
-                    await ctx.reply("Illegal operation.")
-                    break
-            else:
-                result_msgs.append("Illegal role name. Type `>help role` for a list of acceptable role names. ")
+                    result_msgs.append("Illegal role name. Type `>help role` for a list of acceptable role names. ")
+        else:
+            await ctx.reply("Illegal operation. Check your <role_type> input. ")
+            return
+
         final_msg: str = ""
         for name, result in zip(role_names, result_msgs):
             final_msg += "**{}**: {} \n".format(name, result)

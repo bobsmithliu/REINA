@@ -69,6 +69,10 @@ class Mods(commands.Cog):
                     async with session.get(CONSTANT.SHOWROOM_STREAM_LINKS[person][1], headers=headers) as r:
                         if r.status == 200:
                             page = bs4.BeautifulSoup(await r.text(), "html.parser")
+                        else:
+                            await ctx.reply("Cannot establish connection to {}. Status code is {}".format(
+                                CONSTANT.SHOWROOM_STREAM_LINKS[person][1], r.status))
+                            return
 
                 try:
                     parsed_time = time.strptime(planned_time, "%H:%M")
