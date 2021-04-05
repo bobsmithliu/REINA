@@ -43,7 +43,7 @@ Use >help [command] to see the help text of a specific command.
 Use bot only in #bot spam
 '''
 
-KENZANCHUU_LINKS: [str] = [
+TV_LINKS: [str] = [
     "https://www.zhanqi.tv/873082427",
     "https://ok.ru/videoembed/2733731028727",
     "https://vk.com/videos-177082369"
@@ -84,9 +84,9 @@ async def on_ready() -> None:
     if scheduler.state == 0:
         scheduler.remove_all_jobs()
 
-        scheduler.add_job(prompt_kenzanchuu, "cron", day_of_week='sat', hour=22, minute=30,
+        scheduler.add_job(prompt_tv, "cron", day_of_week='sat', hour=22, minute=30,
                           start_date=datetime.datetime(2021, 1, 9), args=[bot, 30])
-        scheduler.add_job(prompt_kenzanchuu, "cron", day_of_week='sat', hour=22, minute=55,
+        scheduler.add_job(prompt_tv, "cron", day_of_week='sat', hour=22, minute=55,
                           start_date=datetime.datetime(2021, 1, 9), args=[bot, 5])
         scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=30, args=[bot, 30])
         scheduler.add_job(prompt_radio, "cron", day_of_week='sat', hour=15, minute=55, args=[bot, 5])
@@ -114,26 +114,26 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError) 
 
 # === Helpers ===
 
-async def prompt_kenzanchuu(bot_b: commands.Bot, t_minus: int) -> None:
+async def prompt_tv(bot_b: commands.Bot, t_minus: int) -> None:
     now: datetime.datetime = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
     tv_radio_channel: discord.TextChannel = bot.get_channel(465158208978157588)
-    kenzanchuu_role: discord.Role = tv_radio_channel.guild.get_role(641112458291052584)
+    tv_role: discord.Role = tv_radio_channel.guild.get_role(641112458291052584)
 
     await tv_radio_channel.trigger_typing()
 
-    alert_embed: discord.Embed = discord.Embed(title="Kenzanchu Reminder", type='rich',
+    alert_embed: discord.Embed = discord.Embed(title="Keisanchu Reminder", type='rich',
                                                description=TV_DESCRIPTION.format(now.strftime('%Y-%m-%d %H:%M %Z'),
-                                                                                 kenzanchuu_role.mention, t_minus))
+                                                                                 tv_role.mention, t_minus))
 
-    for index, item in enumerate(KENZANCHUU_LINKS, start=1):
+    for index, item in enumerate(TV_LINKS, start=1):
         alert_embed.add_field(name="Link {}".format(index), value=item)
 
-    alert_embed.set_image(url="https://nanabunnonijyuuni.com/images/4/a18/02ab0a833376c38b775887a818f8a.jpg")
+    alert_embed.set_image(url="https://nanabunnonijyuuni.com/images/4/4aa/99d00506eeaa50ecf006cc6313865.jpg")
 
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
 
-    await tv_radio_channel.send(content=kenzanchuu_role.mention, embed=alert_embed)
+    await tv_radio_channel.send(content=tv_role.mention, embed=alert_embed)
 
 
 async def prompt_radio(bot_b: commands.Bot, t_minus: int) -> None:
