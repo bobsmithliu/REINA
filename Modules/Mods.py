@@ -2,8 +2,6 @@ import asyncio
 import datetime
 import time
 
-import aiohttp
-import bs4
 import discord
 import pytz
 from discord.ext import commands
@@ -53,11 +51,6 @@ class Mods(commands.Cog):
         """
         stream_channel: discord.TextChannel = ctx.guild.get_channel(336281736633909258)
 
-        headers = {
-            'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.62 Safari/537.36",
-            'Referer': "https://www.showroom-live.com"
-        }
-
         if person in CONSTANT.SHOWROOM_STREAM_LINKS:
             role_to_ping: discord.Role = ctx.guild.get_role(SHOWROOM_ALERT_ROLES[person])
 
@@ -65,60 +58,50 @@ class Mods(commands.Cog):
             now: datetime.datetime = datetime.datetime.now(JP_TZ)
 
             try:
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(CONSTANT.SHOWROOM_STREAM_LINKS[person][1], headers=headers) as r:
-                        if r.status == 200:
-                            page = bs4.BeautifulSoup(await r.text(), "html.parser")
-                        else:
-                            await ctx.reply("Cannot establish connection to {}. Status code is {}".format(
-                                CONSTANT.SHOWROOM_STREAM_LINKS[person][1], r.status))
-                            return
-
-                try:
-                    parsed_time = time.strptime(planned_time, "%H:%M")
-                except ValueError:
-                    await ctx.reply("Time cannot be parsed. ")
-                    return
-
-                stream_time = JP_TZ.localize(datetime.datetime(year=now.year,
-                                                               month=now.month,
-                                                               day=now.day,
-                                                               hour=parsed_time.tm_hour,
-                                                               minute=parsed_time.tm_min))
-
-                if date == "tomorrow":
-                    stream_time = stream_time + datetime.timedelta(days=1)
-
-                announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.SHOWROOM_STREAM_LINKS[person][0]),
-                                                   type='rich',
-                                                   description='{}'.format(CONSTANT.SHOWROOM_STREAM_LINKS[person][1]),
-                                                   color=CONSTANT.SHOWROOM_STREAM_LINKS[person][2])
-
-                for tz in TIMEZONES:
-                    announcement_embed.add_field(name=tz[0],
-                                                 value=stream_time.astimezone(tz[1]).strftime(TIME_FORMAT_STRING))
-
-                announcement_embed.set_author(name='Upcoming Showroom Stream',
-                                              icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
-
-                # TODO: Maybe use static image here? Can strip down the package.
-                announcement_embed.set_image(url=page.find("meta", attrs={"property": "og:image"})['content'])
-
-                announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
-                                              icon_url=ctx.author.avatar_url)
-
-                stream_msg = await stream_channel.send(content=role_to_ping.mention, embed=announcement_embed)
-                await stream_msg.pin()
-                await ctx.reply("Success. ")
-
-                time_now = datetime.datetime.now(datetime.timezone.utc)
-                seconds_to_unpin = int((stream_time - time_now).total_seconds())
-                await asyncio.sleep(seconds_to_unpin + int(unpin_time))
-                if stream_msg.pinned:
-                    await stream_msg.unpin()
-
+                parsed_time = time.strptime(planned_time, "%H:%M")
             except ValueError:
-                await ctx.reply("HTTP request to Showroom website failed. ")
+                await ctx.reply("Time cannot be parsed. ")
+                return
+
+            stream_time = JP_TZ.localize(datetime.datetime(year=now.year,
+                                                           month=now.month,
+                                                           day=now.day,
+                                                           hour=parsed_time.tm_hour,
+                                                           minute=parsed_time.tm_min))
+
+            if date == "tomorrow":
+                stream_time = stream_time + datetime.timedelta(days=1)
+
+            announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.SHOWROOM_STREAM_LINKS[person][0]),
+                                               type='rich',
+                                               description='{}'.format(CONSTANT.SHOWROOM_STREAM_LINKS[person][1]),
+                                               color=CONSTANT.SHOWROOM_STREAM_LINKS[person][2])
+
+            for tz in TIMEZONES:
+                announcement_embed.add_field(name=tz[0],
+                                             value=stream_time.astimezone(tz[1]).strftime(TIME_FORMAT_STRING))
+
+            announcement_embed.set_author(name='Upcoming Showroom Stream',
+                                          icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
+
+            # get local image
+            img_file: discord.File = discord.File("asset/" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3],
+                                                  filename=CONSTANT.SHOWROOM_STREAM_LINKS[person][3])
+
+            announcement_embed.set_image(url="attachment://" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3])
+
+            announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
+                                          icon_url=ctx.author.avatar_url)
+
+            stream_msg = await stream_channel.send(content=role_to_ping.mention, embed=announcement_embed)
+            await stream_msg.pin()
+            await ctx.reply("Success. ")
+
+            time_now = datetime.datetime.now(datetime.timezone.utc)
+            seconds_to_unpin = int((stream_time - time_now).total_seconds())
+            await asyncio.sleep(seconds_to_unpin + int(unpin_time))
+            if stream_msg.pinned:
+                await stream_msg.unpin()
 
         else:
             await ctx.reply("Illegal name.")

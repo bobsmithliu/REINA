@@ -111,19 +111,21 @@ SHOWROOM_ALERT_ROLEABLES: list[str] = list(SHOWROOM_ALERT_ROLES.keys())
 
 SUBSCRIBABLE: list[int] = [694627966495490078, 641112458291052584]
 
-SHOWROOM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color]] = {
+SHOWROOM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color, str]] = {
+    # Name: ("Full Name", "SR Link", "Color", "img file name")
+
     # 'Chiharu': ('Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()),
-    'Ruri': ('Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green()),
+    'Ruri': ('Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green(), "ruri_showroom.png"),
     # 'Mei': ('Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()),
-    'Uta': ('Kawase Uta', 'https://www.showroom-live.com/kawaseuta', discord.Color.blue()),
-    'Reinyan': ('Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta()),
-    'Sally': ('Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold()),
-    'Ainacchi': ('Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal()),
-    'Kanaeru': ('Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple()),
-    'Rettan': ('Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242)),
-    'Moe': ('Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta()),
-    'Mizzy': ('Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange()),
-    'Nagomin': ('Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250)),
+    'Uta': ('Kawase Uta', 'https://www.showroom-live.com/kawaseuta', discord.Color.blue(), "uta_showroom.png"),
+    'Reinyan': ('Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta(), "reina_showroom.png"),
+    'Sally': ('Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold(), "sally_showroom.png"),
+    'Ainacchi': ('Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal(), "aina_showroom.png"),
+    'Kanaeru': ('Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple(), "kanae_showroom.png"),
+    'Rettan': ('Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242), "urara_showroom.png"),
+    'Moe': ('Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta(), "moe_showroom.png"),
+    'Mizzy': ('Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange(), "mizuha_showroom.png"),
+    'Nagomin': ('Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250), "nagomi_showroom.png"),
     # 'Nananiji': ('Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue())
 }
 

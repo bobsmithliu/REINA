@@ -32,7 +32,7 @@ Fill out the form as best you can and click the bottom button to proceed to the 
 '''
 
 BOT_DESCRIPTION: str = '''
-R.E.I.N.A. 2.17
+R.E.I.N.A. 2.18
 
 Roles and Entertainment Information and Notification Agent
 
