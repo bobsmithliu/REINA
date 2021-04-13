@@ -1,6 +1,6 @@
 Privacy Policy
 
-Using this bot (Discord unique user name: R.E.I.N.A. #3681, "this bot") means that you have read and understood this document.
+Using this bot (Discord unique username: R.E.I.N.A. #3681, "this bot") means that you have read and understood this document.
 
 The developer of this bot has made every possible effort to minimize data collection. However, to keep this bot operable responsively, some non-sensitive data will be collected in a non-permanent way. No data is ever stored permanently.
 

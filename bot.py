@@ -148,7 +148,7 @@ async def prompt_radio(bot_b: commands.Bot, t_minus: int) -> None:
                                                                                     radio_role.mention, t_minus))
 
     alert_embed.add_field(name='You can watch it at',
-                          value='http://www.uniqueradio.jp/agplayerf/player3.php')
+                          value='https://www.uniqueradio.jp/agplayer5/player.php')
     alert_embed.set_footer(text='R.E.I.N.A. scheduled message.', icon_url=bot_b.user.avatar_url)
     alert_embed.set_image(url='https://pbs.twimg.com/media/EUcZFgcUUAA43Rp?format=jpg&name=small')
 

@@ -100,6 +100,8 @@ class Mods(commands.Cog):
 
                 announcement_embed.set_author(name='Upcoming Showroom Stream',
                                               icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
+
+                # TODO: Maybe use static image here? Can strip down the package.
                 announcement_embed.set_image(url=page.find("meta", attrs={"property": "og:image"})['content'])
 
                 announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
