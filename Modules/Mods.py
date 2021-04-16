@@ -33,8 +33,7 @@ class Mods(commands.Cog):
     @commands.command()
     @commands.has_any_role('Moderators', 'Disciplinary Committee')
     @check_if_bot_spam()
-    async def announce_sr(self, ctx: commands.Context, person: str, date: str, planned_time: str,
-                          unpin_time: str = "3600"):
+    async def announce_sr(self, ctx: commands.Context, person: str, date: str, planned_time: str):
         """
         (Mod-only command) Make Showroom stream announcements.
 
@@ -93,15 +92,8 @@ class Mods(commands.Cog):
             announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
                                           icon_url=ctx.author.avatar_url)
 
-            stream_msg = await stream_channel.send(content=role_to_ping.mention, embed=announcement_embed)
-            await stream_msg.pin()
+            await stream_channel.send(content=role_to_ping.mention, embed=announcement_embed)
             await ctx.reply("Success. ")
-
-            time_now = datetime.datetime.now(datetime.timezone.utc)
-            seconds_to_unpin = int((stream_time - time_now).total_seconds())
-            await asyncio.sleep(seconds_to_unpin + int(unpin_time))
-            if stream_msg.pinned:
-                await stream_msg.unpin()
 
         else:
             await ctx.reply("Illegal name.")
@@ -158,8 +150,7 @@ class Mods(commands.Cog):
             announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
                                           icon_url=ctx.author.avatar_url)
 
-            stream_msg = await stream_channel.send(embed=announcement_embed)
-            await stream_msg.pin()
+            await stream_channel.send(embed=announcement_embed)
             await ctx.reply("Success. ")
         else:
             await ctx.reply("You've put an illegal name or this person does not have an Instagram account yet. ")
