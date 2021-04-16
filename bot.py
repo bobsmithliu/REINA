@@ -156,12 +156,13 @@ async def prompt_radio(bot_b: commands.Bot, t_minus: int) -> None:
 
 # === Helpers ===
 
-bot.add_cog(General(bot))
-bot.add_cog(Roles(bot))
-bot.add_cog(Mods(bot))
-bot.add_cog(Subscribe(bot))
-bot.add_cog(Authentication(bot))
-bot.add_cog(Pronouns(bot))
-bot.add_cog(Showroom(bot))
+if __name__ == "__main__":
+    bot.add_cog(General(bot))
+    bot.add_cog(Roles(bot))
+    bot.add_cog(Mods(bot))
+    bot.add_cog(Subscribe(bot))
+    bot.add_cog(Authentication(bot))
+    bot.add_cog(Pronouns(bot))
+    bot.add_cog(Showroom(bot))
 
-bot.run(os.getenv("DISCORD_TOKEN"))
+    bot.run(os.getenv("DISCORD_TOKEN"))
