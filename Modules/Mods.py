@@ -85,7 +85,7 @@ class Mods(commands.Cog):
                                           icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
 
             # get local image
-            img_file: discord.File = discord.File("asset/" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3],
+            img_file: discord.File = discord.File("assets/" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3],
                                                   filename=CONSTANT.SHOWROOM_STREAM_LINKS[person][3])
 
             announcement_embed.set_image(url="attachment://" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3])
