@@ -45,8 +45,9 @@ Use bot only in #bot spam
 
 TV_LINKS: [str] = [
     "https://www.zhanqi.tv/873082427",
-    "https://ok.ru/videoembed/2733731028727",
-    "https://vk.com/videos-177082369"
+    "https://ok.ru/videoembed/2909073514231",
+    "https://vk.com/videos-177082369",
+    "https://www.coolstreaming.us/channelnew/54626/TokyoMxTv.html"
 ]
 
 # === Intents Section ===
