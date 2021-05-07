@@ -1,5 +1,0 @@
-discord
-discord.py
-pytz
-APScheduler
-textblob
