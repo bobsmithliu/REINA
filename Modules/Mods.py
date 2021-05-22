@@ -70,10 +70,10 @@ class Mods(commands.Cog):
             if date == "tomorrow":
                 stream_time = stream_time + datetime.timedelta(days=1)
 
-            announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.SHOWROOM_STREAM_LINKS[person][0]),
+            announcement_embed = discord.Embed(title="**{}**".format(CONSTANT.SHOWROOM_STREAM_LINKS[person].name),
                                                type='rich',
-                                               description='{}'.format(CONSTANT.SHOWROOM_STREAM_LINKS[person][1]),
-                                               color=CONSTANT.SHOWROOM_STREAM_LINKS[person][2])
+                                               description='{}'.format(CONSTANT.SHOWROOM_STREAM_LINKS[person].sr_link),
+                                               color=CONSTANT.SHOWROOM_STREAM_LINKS[person].color)
 
             for tz in TIMEZONES:
                 announcement_embed.add_field(name=tz[0],
@@ -83,10 +83,10 @@ class Mods(commands.Cog):
                                           icon_url="https://www.showroom-live.com/assets/img/v3/apple-touch-icon.png")
 
             # get local image
-            img_file: discord.File = discord.File("assets/" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3],
-                                                  filename=CONSTANT.SHOWROOM_STREAM_LINKS[person][3])
+            img_file: discord.File = discord.File("assets/" + CONSTANT.SHOWROOM_STREAM_LINKS[person].pic_name,
+                                                  filename=CONSTANT.SHOWROOM_STREAM_LINKS[person].pic_name)
 
-            announcement_embed.set_image(url="attachment://" + CONSTANT.SHOWROOM_STREAM_LINKS[person][3])
+            announcement_embed.set_image(url="attachment://" + CONSTANT.SHOWROOM_STREAM_LINKS[person].pic_name)
 
             announcement_embed.set_footer(text='Sent by {}'.format(ctx.author.display_name),
                                           icon_url=ctx.author.avatar_url)

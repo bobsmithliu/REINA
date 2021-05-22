@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import discord
 
 # ====== Oshi roles ======
@@ -111,26 +113,35 @@ SHOWROOM_ALERT_ROLEABLES: list[str] = list(SHOWROOM_ALERT_ROLES.keys())
 
 SUBSCRIBABLE: list[int] = [694627966495490078, 641112458291052584]
 
-SHOWROOM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color, str]] = {
+ShowroomInfo = namedtuple('ShowroomInfo', ['name', 'sr_link', 'color', 'pic_name'])
+
+SHOWROOM_STREAM_LINKS: dict[str, ShowroomInfo] = {
     # Name: ("Full Name", "SR Link", "Color", "img file name")
 
-    # 'Chiharu': ('Hokaze Chiharu', 'https://www.showroom-live.com/digital_idol_2', discord.Color.red()),
-    'Ruri': ('Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green(), "ruri_showroom.png"),
-    # 'Mei': ('Hanakawa Mei', 'https://www.showroom-live.com/digital_idol_7', discord.Color.blue()),
-    'Uta': ('Kawase Uta', 'https://www.showroom-live.com/kawaseuta', discord.Color.blue(), "uta_showroom.png"),
-    'Reinyan': ('Miyase Reina', 'https://www.showroom-live.com/digital_idol_9', discord.Color.dark_magenta(), "reina_showroom.png"),
-    'Sally': ('Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold(), "sally_showroom.png"),
-    'Ainacchi': ('Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal(), "aina_showroom.png"),
-    'Kanaeru': ('Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple(), "kanae_showroom.png"),
-    'Rettan': ('Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19', discord.Color.from_rgb(230, 136, 242), "urara_showroom.png"),
-    'Moe': ('Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta(), "moe_showroom.png"),
-    'Mizzy': ('Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange(), "mizuha_showroom.png"),
-    'Nagomin': ('Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22', discord.Color.from_rgb(220, 248, 250), "nagomi_showroom.png"),
-    # 'Nananiji': ('Group Stream', 'https://www.showroom-live.com/nanabunno', discord.Color.blue())
+    'Ruri': ShowroomInfo('Umino Ruri', 'https://www.showroom-live.com/digital_idol_4', discord.Color.green(),
+                         "ruri_showroom.png"),
+    'Uta': ShowroomInfo('Kawase Uta', 'https://www.showroom-live.com/kawaseuta', discord.Color.blue(),
+                        "uta_showroom.png"),
+    'Reinyan': ShowroomInfo('Miyase Reina', 'https://www.showroom-live.com/digital_idol_9',
+                            discord.Color.dark_magenta(), "reina_showroom.png"),
+    'Sally': ShowroomInfo('Amaki Sally', 'https://www.showroom-live.com/digital_idol_11', discord.Color.gold(),
+                          "sally_showroom.png"),
+    'Ainacchi': ShowroomInfo('Takeda Aina', 'https://www.showroom-live.com/digital_idol_15', discord.Color.teal(),
+                             "aina_showroom.png"),
+    'Kanaeru': ShowroomInfo('Shirosawa Kanae', 'https://www.showroom-live.com/digital_idol_18', discord.Color.purple(),
+                            "kanae_showroom.png"),
+    'Rettan': ShowroomInfo('Takatsuji Urara', 'https://www.showroom-live.com/digital_idol_19',
+                           discord.Color.from_rgb(230, 136, 242), "urara_showroom.png"),
+    'Moe': ShowroomInfo('Suzuhana Moe', 'https://www.showroom-live.com/digital_idol_20', discord.Color.magenta(),
+                        "moe_showroom.png"),
+    'Mizzy': ShowroomInfo('Kuraoka Mizuha', 'https://www.showroom-live.com/digital_idol_21', discord.Color.orange(),
+                          "mizuha_showroom.png"),
+    'Nagomin': ShowroomInfo('Saijo Nagomi', 'https://www.showroom-live.com/digital_idol_22',
+                            discord.Color.from_rgb(220, 248, 250), "nagomi_showroom.png"),
 }
 
+# Do we even use this?
 INSTAGRAM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color]] = {
-    # 'Chiharu': ('Hokaze Chiharu', 'https://www.instagram.com/c_rurun410/live', discord.Color.red()),
     'Reina': ('Miyase Reina', 'https://www.instagram.com/reinyan_0526/live', discord.Color.dark_magenta()),
     'Sally': ('Amaki Sally', 'https://www.instagram.com/sallyamaki/live', discord.Color.gold()),
     'Aina': ('Takeda Aina', 'https://www.instagram.com/___aina35_____/live', discord.Color.teal()),
@@ -140,6 +151,7 @@ INSTAGRAM_STREAM_LINKS: dict[str, tuple[str, str, discord.Color]] = {
 }
 
 # TODO: Evaluate performance impact of indexing lyrics
+# Do we even use this?
 LYRICS: dict[str, list[str]] = {
     "僕は存在していなかった":
         ["僕は自分を信じていない　\n自分の存在　知られたくなかった",
