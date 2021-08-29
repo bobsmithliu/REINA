@@ -7,3 +7,7 @@ R.E.I.N.A. ver 2.18
 Roles and Entertainment Information and Notification Agent
 
 A simple bot at 22/7 Discord server. 
+
+## Future
+
+As this bot's main relying library: discord.py, is no longer maintained, this bot's will **no longer accept new features** until a new library found. 
