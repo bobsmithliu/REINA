@@ -11,3 +11,7 @@ A simple bot at 22/7 Discord server.
 ## Future
 
 As this bot's main relying library: discord.py, is no longer maintained, this bot will **no longer implement new features** until a new library is found. 
+
+### 2021/11/03 Update
+
+As the situation continues to deteriorate, this bot will cease development immediately after this commit and will be archived. Heroku depolyment will be shut down too. 
