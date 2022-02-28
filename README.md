@@ -15,3 +15,7 @@ As this bot's main relying library: discord.py, is no longer maintained, this bo
 ### 2021/11/03 Update
 
 As the situation continues to deteriorate, this bot will cease development immediately after this commit and will be archived. Heroku depolyment will be shut down too. 
+
+### 2022/02/28 Update
+
+Forked from skk_tj's repo, this bot would be re-developed by using discord.js. 
