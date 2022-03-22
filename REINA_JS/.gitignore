@@ -1,2 +1,7 @@
 # Token File
 config.json
+
+#Node.js related
+
+node_modules
+.env
